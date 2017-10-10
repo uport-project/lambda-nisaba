@@ -1,5 +1,7 @@
+import { decodeToken, TokenVerifier } from 'jsontokens'
+import { Credentials, SimpleSigner } from 'uport'
 
- class PhoneHandler{
+class PhoneHandler{
 
     constructor(attestationMgr) {
         this.attestationMgr = attestationMgr;
@@ -17,6 +19,21 @@
         }
 
         //TODO: Check if the fuelToken is present and valid
+        if (body.token === undefined){
+          cb({code:400, message:'no fuelToken provided'})
+          return;
+        } else {
+          console.log(body.token)
+          try{
+            let tv = new TokenVerifier('ES256K', process.env.SIGNER_KEY)
+            console.log(body.token)
+            tv.verify(body.token)
+          } catch(e){
+            console.log(e)
+            cb({code:500, message:'bad token'})
+            return;
+          }
+        }
 
         //TODO: Extract phoneNumber from fuelToken;
         let phoneNumber='' //fuelToken.phoneNumber;
@@ -29,6 +46,6 @@
         this.debug(attestation);
         cb(null,attestation);
     }
-}    
+}
 
 module.exports = PhoneHandler;

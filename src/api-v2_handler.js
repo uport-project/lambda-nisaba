@@ -11,7 +11,7 @@ module.exports.phone = (event, context, callback) => {
   //console.log(event)
   //console.log(event.body)
   let body;
-  try{ body = JSON.parse(event.body) } catch(e){console.log(e);body={}}
+  try{ body = JSON.parse(JSON.stringify(event)) } catch(e){console.log(e);body={}}
   phoneHandler.handle(body,(err,resp)=>{
     let response;
     if(err==null){
