@@ -1,0 +1,28 @@
+service: lambda-nisaba
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  stage: develop
+  region: us-west-2
+
+# Use the serverless-webpack plugin to transpile ES6
+plugins:
+  - serverless-webpack
+
+# Enable auto-packing of external modules
+custom:
+  webpackIncludeModules: true
+
+functions:
+  phone:
+    handler: src/api-v2_handler.phone
+    description: Create phone attestations
+    events:
+     - http:
+         path: v2/phone
+         method: post
+    environment:
+      SIGNER_KEY: 033ee5fb940cb6803ac9b00f89011567d049e80c9066c5229078dde93da0872d67
+      APP_NAME: 'ConsenSys Verification Services (test:ajunge)'
+      APP_MNID: '2owhy1rcRzt2DiYd95ov5aKkzyzcJCCJGMG'

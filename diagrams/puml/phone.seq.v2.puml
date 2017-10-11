@@ -1,0 +1,28 @@
+@startuml
+participant "uPort Mobile App" as uPort
+participant "uPort::nisaba" as nisaba
+
+uPort -> nisaba: Request Phone Attestation\nPOST /v2/phone
+note left of nisaba #FFAAAA
+Authorization: Bearer <jwt token>
+end note
+note left of nisaba #FFAAAA
+{
+  uPortId: <uport id>,
+  phoneNumber: <phone number>
+}
+end note
+activate nisaba
+nisaba -> nisaba: Issue attestation for phoneNumber
+nisaba -> uPort: Return attestation
+note left of nisaba #FFAAAA
+{
+  status: "success",
+  data: <attestation>
+}
+end note
+deactivate nisaba
+
+
+
+@enduml
