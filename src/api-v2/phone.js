@@ -23,7 +23,7 @@ class PhoneHandler{
         } else {
           try{
             let verified = new TokenVerifier(
-              'ES256k', process.env.SIGNER_KEY).verify(body.token)
+              'ES256k', process.env.PUBLIC_KEY).verify(body.token)
             if (!verified){
               cb({code:400, message:'cannot verify token'})
               return;
