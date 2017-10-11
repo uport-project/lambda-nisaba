@@ -23,6 +23,6 @@ functions:
          path: v2/phone
          method: post
     environment:
-      SIGNER_KEY: 746c06333df9d76c533783bb04aea008cb44e48cda1733dafa9eb65302a2e011
+      SIGNER_KEY: 033ee5fb940cb6803ac9b00f89011567d049e80c9066c5229078dde93da0872d67
       APP_NAME: 'ConsenSys Verification Services (test:ajunge)'
       APP_MNID: '2owhy1rcRzt2DiYd95ov5aKkzyzcJCCJGMG'

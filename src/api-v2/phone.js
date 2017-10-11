@@ -1,4 +1,4 @@
-import { decodeToken, TokenVerifier } from 'jsontokens'
+import { decodeToken, TokenVerifier } from 'jwt-js'
 import { Credentials, SimpleSigner } from 'uport'
 
 class PhoneHandler{
@@ -17,29 +17,33 @@ class PhoneHandler{
             cb({code:403, message:'no body'})
             return;
         }
-
-        //TODO: Check if the fuelToken is present and valid
+        console.log(body)
         if (body.token === undefined){
           cb({code:400, message:'no fuelToken provided'})
           return;
         } else {
-          console.log(body.token)
           try{
-            let tv = new TokenVerifier('ES256K', process.env.SIGNER_KEY)
-            console.log(body.token)
-            tv.verify(body.token)
+            let verified = new TokenVerifier(
+              'ES256k', process.env.SIGNER_KEY).verify(body.token)
+            if (!verified){
+              cb({code:400, message:'cannot verify token'})
+              return;
+            }
           } catch(e){
-            console.log(e)
-            cb({code:500, message:'bad token'})
+            this.debug("Error validating fuelToken: " + e)
+            cb({code:500, message:'not a valid jwt token'})
             return;
           }
         }
 
-        //TODO: Extract phoneNumber from fuelToken;
-        let phoneNumber='' //fuelToken.phoneNumber;
+        let fuelToken = decodeToken(body.token).payload
+        let phoneNumber=fuelToken.phoneNumber
 
-        //TODO: Check if uportId is present
-        let sub=''//body.uportId;
+        if (body.uportId === undefined){
+          cb({code:400, message:'no uPortId provided'})
+          return;
+        }
+        let sub=body.uportId
 
         this.debug("Creating attestation for sub:" +sub+" on "+phoneNumber)
         let attestation = await this.attestationMgr.attest(sub, phoneNumber);

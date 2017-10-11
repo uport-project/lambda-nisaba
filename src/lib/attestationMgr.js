@@ -1,8 +1,7 @@
-import { decodeToken } from 'jsontokens'
 import { Credentials, SimpleSigner } from 'uport'
 
 class AttestationMgr {
-    
+
     constructor(privateKey,appName,appMnid) {
         this.privateKey=privateKey;
         this.appMnid=appMnid;
@@ -22,9 +21,9 @@ class AttestationMgr {
             sub: sub,
             exp: expires,
             claims: {phone: phone}
-        }   
+        }
         return this.credentials.attest(att);
     }
-}    
+}
 
 module.exports = AttestationMgr;
