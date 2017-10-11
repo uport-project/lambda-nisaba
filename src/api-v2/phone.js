@@ -17,7 +17,6 @@ class PhoneHandler{
             cb({code:403, message:'no body'})
             return;
         }
-        console.log(body)
         if (body.token === undefined){
           cb({code:400, message:'no fuelToken provided'})
           return;
