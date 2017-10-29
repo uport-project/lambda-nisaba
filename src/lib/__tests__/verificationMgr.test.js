@@ -5,7 +5,7 @@ let pgClientMock={
     end:jest.fn()
 }
 Client.mockImplementation(()=>{return pgClientMock});
-const VerificationMgr = require('../VerificationMgr');
+const VerificationMgr = require('../verificationMgr');
 
 describe('VerificationMgr', () => {
     
@@ -90,9 +90,6 @@ describe('VerificationMgr', () => {
         .then((resp)=> {
             expect(pgClientMock.connect).toHaveBeenCalledTimes(1);
             expect(pgClientMock.query).toHaveBeenCalledTimes(1);
-            expect(pgClientMock.query).toBeCalledWith(
-                "SELECT * FROM verifications WHERE active='true'::boolean AND device_key=$1 AND phone_number=$2",
-                [deviceKey,phoneNumber]);
             expect(pgClientMock.end).toHaveBeenCalledTimes(1);
             expect(resp).toEqual({code: code})
             done()

@@ -6,11 +6,11 @@ describe('SmsHandler', () => {
     let deviceKey='0x123456';
     let phoneNumber='12345679';
     let code='fakecode'
-    let codeMgrMock={ getCode: jest.fn()};
+    let verificationMgrMock={ get: jest.fn()};
     let smsMgrMock={ sendCode: jest.fn()};
 
     beforeAll(() => {
-        sut = new SmsHandler(codeMgrMock,smsMgrMock);
+        sut = new SmsHandler(verificationMgrMock,smsMgrMock);
     });
 
     test('empty constructor', () => {
@@ -44,16 +44,16 @@ describe('SmsHandler', () => {
         })
     })
 
-    test('call codeMgr.getCode()', done => {
+    test('call verificationMgr.get()', done => {
         sut.handle({deviceKey: deviceKey, phoneNumber: phoneNumber },(err,res)=>{
-            expect(codeMgrMock.getCode).toBeCalled();
-            expect(codeMgrMock.getCode).toBeCalledWith(deviceKey,phoneNumber);
+            expect(verificationMgrMock.get).toBeCalled();
+            expect(verificationMgrMock.get).toBeCalledWith(deviceKey,phoneNumber);
             done();
         })
     })
 
     test('call smsMgr.sendCode()', done => {
-        codeMgrMock.getCode.mockImplementation(()=>code)
+        verificationMgrMock.get.mockImplementation(()=>{ return {code: code, id: 123} })
         sut.handle({deviceKey: deviceKey, phoneNumber: phoneNumber },(err,res)=>{
             expect(smsMgrMock.sendCode).toBeCalled();
             expect(smsMgrMock.sendCode).toBeCalledWith(code,phoneNumber);
@@ -62,11 +62,11 @@ describe('SmsHandler', () => {
     })
 
     test('catch exception', done => {
-        codeMgrMock.getCode.mockImplementation(()=>{
+        verificationMgrMock.get.mockImplementation(()=>{
             throw("throwed error")
         });
         sut.handle({deviceKey: deviceKey, phoneNumber: phoneNumber },(err,res)=>{
-            expect(codeMgrMock.getCode).toBeCalled();
+            expect(verificationMgrMock.get).toBeCalled();
             expect(err).not.toBeNull()
             expect(err).toEqual('throwed error')
             done();
@@ -74,11 +74,11 @@ describe('SmsHandler', () => {
     })
 
     test('catch exception (with message)', done => {
-        codeMgrMock.getCode.mockImplementation(()=>{
+        verificationMgrMock.get.mockImplementation(()=>{
             throw({message:"throwed error"})
         });
         sut.handle({deviceKey: deviceKey, phoneNumber: phoneNumber },(err,res)=>{
-            expect(codeMgrMock.getCode).toBeCalled();
+            expect(verificationMgrMock.get).toBeCalled();
             expect(err).not.toBeNull()
             expect(err).toEqual('throwed error')
             done();
