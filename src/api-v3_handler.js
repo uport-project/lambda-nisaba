@@ -1,4 +1,6 @@
 'use strict'
+const AWS = require('aws-sdk');
+const kms = new AWS.KMS();
 
 const CodeMgr = require('./lib/codeMgr');
 const SmsMgr = require('./lib/smsMgr');
@@ -19,6 +21,20 @@ module.exports.attestation = (event, context, callback) => { postHandler(callHan
 
 
 const postHandler = (handler,event,context,callback) =>{
+  if(!codeMgr.isSecretsSet()){
+    kms.decrypt({
+      CiphertextBlob: Buffer(process.env.SECRETS, 'base64')
+    }).promise().then(data => {
+      const decrypted = String(data.Plaintext)
+      codeMgr.setSecrets(JSON.parse(decrypted))
+      doHandler(handler,event,context,callback)
+    })
+  }else{
+    doHandler(handler,event,context,callback)
+  }
+}
+
+const doHandler = (handler,event,context,callback) =>{
   //console.log(event)
   //console.log(event.body)
   let body;
