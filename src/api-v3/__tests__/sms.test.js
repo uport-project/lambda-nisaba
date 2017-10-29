@@ -1,6 +1,5 @@
 const SmsHandler = require('../sms');
 
-
 describe('SmsHandler', () => {
     
     let sut;
