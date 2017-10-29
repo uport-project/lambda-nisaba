@@ -1,14 +1,16 @@
 'use strict'
 
+const CodeMgr = require('./lib/codeMgr');
 const SmsMgr = require('./lib/smsMgr');
 const CallMgr = require('./lib/callMgr');
 const SmsHandler = require('./api-v3/sms');
 const CallHandler = require('./api-v3/call');
 
+let codeMgr = new CodeMgr();
 let smsMgr = new SmsMgr();
 let callMgr = new CallMgr();
 
-let smsHandler = new SmsHandler(smsMgr);
+let smsHandler = new SmsHandler(codeMgr,smsMgr);
 module.exports.sms = (event, context, callback) => { postHandler(smsHandler,event,context,callback) }
 let callHandler = new CallHandler(callMgr);
 module.exports.call = (event, context, callback) => { postHandler(callHandler,event,context,callback) }
