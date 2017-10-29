@@ -2,17 +2,17 @@
 const AWS = require('aws-sdk');
 const kms = new AWS.KMS();
 
-const CodeMgr = require('./lib/codeMgr');
+const VerificationMgr = require('./lib/verificationMgr');
 const SmsMgr = require('./lib/smsMgr');
 const CallMgr = require('./lib/callMgr');
 const SmsHandler = require('./api-v3/sms');
 const CallHandler = require('./api-v3/call');
 
-let codeMgr = new CodeMgr();
+let verificationMgr = new VerificationMgr();
 let smsMgr = new SmsMgr();
 let callMgr = new CallMgr();
 
-let smsHandler = new SmsHandler(codeMgr,smsMgr);
+let smsHandler = new SmsHandler(verificationMgr,smsMgr);
 module.exports.sms = (event, context, callback) => { postHandler(smsHandler,event,context,callback) }
 let callHandler = new CallHandler(callMgr);
 module.exports.call = (event, context, callback) => { postHandler(callHandler,event,context,callback) }
@@ -21,12 +21,12 @@ module.exports.attestation = (event, context, callback) => { postHandler(callHan
 
 
 const postHandler = (handler,event,context,callback) =>{
-  if(!codeMgr.isSecretsSet()){
+  if(!verificationMgr.isSecretsSet()){
     kms.decrypt({
       CiphertextBlob: Buffer(process.env.SECRETS, 'base64')
     }).promise().then(data => {
       const decrypted = String(data.Plaintext)
-      codeMgr.setSecrets(JSON.parse(decrypted))
+      verificationMgr.setSecrets(JSON.parse(decrypted))
       doHandler(handler,event,context,callback)
     })
   }else{

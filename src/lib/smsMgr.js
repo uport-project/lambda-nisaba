@@ -4,7 +4,7 @@ class SmsMgr {
     }
 
     sendCode(code,phoneNumber){
-        
+        console.log("FAKE: sending code:"+code+" to "+phoneNumber)
     }
 }    
 

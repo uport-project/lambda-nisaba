@@ -1,8 +1,8 @@
 
 class SmsHandler {
 
-    constructor(codeMgr,smsMgr) {
-        this.codeMgr = codeMgr;
+    constructor(verificationMgr,smsMgr) {
+        this.verificationMgr = verificationMgr;
         this.smsMgr = smsMgr;
     }
 
@@ -23,13 +23,24 @@ class SmsHandler {
             return;
         }
 
-        //Get code
-        let code=await this.codeMgr.getCode(body.deviceKey,body.phoneNumber);
-        
-        //Send code
-        let resp=await this.smsMgr.sendCode(code,body.phoneNumber);
-        
-        cb(null,resp);
+        try{
+            //Get code
+            let verification=await this.verificationMgr.get(body.deviceKey,body.phoneNumber);
+            
+            //Send code
+            let resp=await this.smsMgr.sendCode(verification.code,body.phoneNumber);
+            
+            //Log sms sent on verification
+            let log={
+                channel: 'sms'
+            }
+            let r=await this.verificationMgr.log(verification.id,log)
+
+            cb(null,resp);
+        }catch (err){
+            if(err.message) cb(err.message)
+            if(!err.message) cb(err)
+        }
     }
 }    
     

@@ -5,9 +5,9 @@ let pgClientMock={
     end:jest.fn()
 }
 Client.mockImplementation(()=>{return pgClientMock});
-const CodeMgr = require('../codeMgr');
+const VerificationMgr = require('../VerificationMgr');
 
-describe('CodeMgr', () => {
+describe('VerificationMgr', () => {
     
     let sut;
     let deviceKey='0x123456';
@@ -15,9 +15,7 @@ describe('CodeMgr', () => {
     let code='fakeCode';
 
     beforeAll(() => {
-        sut = new CodeMgr();
-        pgClientMock.query=jest.fn(()=>{ return { rows: [{ 'code': code}] }})
-        
+        sut = new VerificationMgr();
     });
 
     test('empty constructor', () => {
@@ -29,8 +27,8 @@ describe('CodeMgr', () => {
         expect(secretSet).toEqual(false);
     });
 
-    test('getCode no pgUrl set', (done) =>{
-        sut.getCode(deviceKey,phoneNumber)
+    test('get no pgUrl set', (done) =>{
+        sut.get(deviceKey,phoneNumber)
         .then((resp)=> {
             fail("shouldn't return"); done()
         })
@@ -46,8 +44,8 @@ describe('CodeMgr', () => {
         expect(sut.isSecretsSet()).toEqual(true);
     });
 
-    test('getCode no deviceKey', (done) =>{
-        sut.getCode(null,phoneNumber)
+    test('get no deviceKey', (done) =>{
+        sut.get(null,phoneNumber)
         .then((resp)=> {
             fail("shouldn't return"); done()
         })
@@ -57,8 +55,8 @@ describe('CodeMgr', () => {
         })
     });
 
-    test('getCode no phoneNumber', (done) =>{
-        sut.getCode(deviceKey,null)
+    test('get no phoneNumber', (done) =>{
+        sut.get(deviceKey,null)
         .then((resp)=> {
             fail("shouldn't return"); done()
         })
@@ -68,8 +66,27 @@ describe('CodeMgr', () => {
         })
     });
 
-    test('getCode ..', (done) =>{
-        sut.getCode(deviceKey,phoneNumber)
+    test('get throw exception', (done) =>{
+        pgClientMock.connect.mockImplementation(()=>{
+            throw("throwed error")
+        });
+        sut.get(deviceKey,phoneNumber)
+        .then((resp)=> {
+            fail("shouldn't return"); done()
+        })
+        .catch( (err)=>{
+            expect(err).toEqual('throwed error')
+            done()
+        })
+    });
+
+    test('get code exist case', (done) =>{
+        pgClientMock.connect=jest.fn()
+        pgClientMock.connect.mockClear()
+        pgClientMock.end.mockClear()
+        pgClientMock.query=jest.fn(()=>{ return { rows: [{ 'code': code}] }})
+        
+        sut.get(deviceKey,phoneNumber)
         .then((resp)=> {
             expect(pgClientMock.connect).toHaveBeenCalledTimes(1);
             expect(pgClientMock.query).toHaveBeenCalledTimes(1);
@@ -85,5 +102,8 @@ describe('CodeMgr', () => {
             done()
         })
     });
+
+    
+
 
 })

@@ -61,5 +61,29 @@ describe('SmsHandler', () => {
         })
     })
 
+    test('catch exception', done => {
+        codeMgrMock.getCode.mockImplementation(()=>{
+            throw("throwed error")
+        });
+        sut.handle({deviceKey: deviceKey, phoneNumber: phoneNumber },(err,res)=>{
+            expect(codeMgrMock.getCode).toBeCalled();
+            expect(err).not.toBeNull()
+            expect(err).toEqual('throwed error')
+            done();
+        })
+    })
+
+    test('catch exception (with message)', done => {
+        codeMgrMock.getCode.mockImplementation(()=>{
+            throw({message:"throwed error"})
+        });
+        sut.handle({deviceKey: deviceKey, phoneNumber: phoneNumber },(err,res)=>{
+            expect(codeMgrMock.getCode).toBeCalled();
+            expect(err).not.toBeNull()
+            expect(err).toEqual('throwed error')
+            done();
+        })
+    })
+
 
 });
