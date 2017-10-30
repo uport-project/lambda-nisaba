@@ -23,18 +23,32 @@ class SmsMgr {
         
         let body="Your uPort code is: "+code
         
-        let message = await client.messages.create({
-          to: '+'+phoneNumber,
-          from: '+12243024792',
-          body: body,
-          statusCallback: 'https://api.uport.space/nisaba/v3/webhook'
-        })
+        let message;
+        try{
+            message = await client.messages.create({
+                to: '+'+phoneNumber,
+                from: '+12243024792',
+                body: body,
+                statusCallback: 'https://api.uport.space/nisaba/v3/webhook'
+            })
+        } catch(err){
+            err.channel="twilio.sms"
+            throw(err)
+        } 
 
-        //console.log(message);
+        let extra={
+            accountSid: message.accountSid,
+            from: message.from,
+            price: message.price,
+            priceUnit: message.priceUnit,
+            to: message.to,
+            uri: message.uri
+        }
         let delivery={
             channel: 'twilio.sms', 
             provider_id: message.sid,
-            status: message.status
+            status: message.status,
+            extra: extra
         }
         return delivery;
         

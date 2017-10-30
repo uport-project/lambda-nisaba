@@ -44,5 +44,5 @@
     "resourcePath": "/v3/sms",
     "httpMethod": "POST",
     "apiId": "tg5jx94s91" },
-    "body": "{\"deviceKey\":\"0x1234\",\"phoneNumber\":\"56998706952\"}",
+    "body": "{\"deviceKey\":\"0x1234\",\"phoneNumber\":\"+56998706952\"}",
     "isBase64Encoded": false }

@@ -98,12 +98,11 @@ class VerificationMgr {
         if(!delivery) throw('no delivery')    
         if(!delivery.verification_id) throw('no delivery.verification_id')
         if(!delivery.channel) throw('no delivery.channel')
-        if(!delivery.provider_id) throw('no delivery.provider_id')
         if(!delivery.status) throw('no delivery.status')
         if(!this.pgUrl) throw('no pgUrl set')
 
         delivery.id=sha3(delivery.verification_id+
-                ":"+delivery.channel+":"+delivery.provider_id).slice(2)
+                ":"+delivery.channel+":"+Date.now()).slice(2)
         
 
         const client = new Client({
@@ -112,10 +111,11 @@ class VerificationMgr {
         try{
             await client.connect()
             const res=await client.query(
-                "INSERT INTO deliveries(id,verification_id,channel,provider_id,status) \
-                      VALUES ($1,$2,$3,$4,$5)"
+                "INSERT INTO deliveries(id,verification_id,channel,provider_id,status,extra) \
+                      VALUES ($1,$2,$3,$4,$5,$6)"
                 , [ delivery.id, delivery.verification_id, 
-                    delivery.channel , delivery.provider_id, delivery.status ]);
+                    delivery.channel , delivery.provider_id, 
+                    delivery.status, delivery.extra ]);
         } catch (e){
             throw(e);
         } finally {

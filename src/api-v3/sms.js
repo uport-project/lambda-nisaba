@@ -27,14 +27,29 @@ class SmsHandler {
             //Get code
             let verification=await this.verificationMgr.get(body.deviceKey,body.phoneNumber);
             
-            //Send code
-            let delivery=await this.smsMgr.sendCode(verification.code,body.phoneNumber);
-            
-            //Log sms sent on verification
-            delivery.verification_id=verification.id
-            let r=await this.verificationMgr.addDelivery(delivery)
+            let delivery;
+            try{
+                //Send code
+                delivery=await this.smsMgr.sendCode(verification.code,body.phoneNumber);
 
-            cb(null,delivery);
+                //Log delivery
+                delivery.verification_id=verification.id
+                let r=await this.verificationMgr.addDelivery(delivery)
+
+                cb(null,verification.id);
+                
+            }catch (e){
+                delivery={
+                    channel: e.channel,
+                    status: "error",
+                    extra: e
+                }
+                //Log delivery
+                delivery.verification_id=verification.id
+                let r=await this.verificationMgr.addDelivery(delivery)
+
+                throw (e)         
+            }
         }catch (err){
             if(err.message) cb(err.message)
             if(!err.message) cb(err)
