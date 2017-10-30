@@ -28,15 +28,13 @@ class SmsHandler {
             let verification=await this.verificationMgr.get(body.deviceKey,body.phoneNumber);
             
             //Send code
-            let resp=await this.smsMgr.sendCode(verification.code,body.phoneNumber);
+            let delivery=await this.smsMgr.sendCode(verification.code,body.phoneNumber);
             
             //Log sms sent on verification
-            let log={
-                channel: 'sms'
-            }
-            let r=await this.verificationMgr.log(verification.id,log)
+            delivery.verification_id=verification.id
+            let r=await this.verificationMgr.addDelivery(delivery)
 
-            cb(null,resp);
+            cb(null,delivery);
         }catch (err){
             if(err.message) cb(err.message)
             if(!err.message) cb(err)

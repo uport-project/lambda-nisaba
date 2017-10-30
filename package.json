@@ -25,9 +25,11 @@
   },
   "dependencies": {
     "pg": "^7.3.0",
+    "querystring": "^0.2.0",
     "serverless-kms-secrets": "^1.0.2",
     "serverless-webpack": "^3.1.0",
     "solidity-sha3": "^0.4.1",
+    "twilio": "^3.9.1",
     "uport": "^0.5.4",
     "webpack": "^3.6.0",
     "webpack-node-externals": "^1.6.0"

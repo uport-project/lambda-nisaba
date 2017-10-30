@@ -77,8 +77,8 @@ class VerificationMgr {
         try{
             await client.connect()
             const res=await client.query(
-                "INSERT INTO verifications(id,device_key,phone_number,code,log) \
-                      VALUES ($1,$2,$3,$4,jsonb '[]')"
+                "INSERT INTO verifications(id,device_key,phone_number,code) \
+                      VALUES ($1,$2,$3,$4)"
                 , [ id, deviceKey, phoneNumber , code ]);
         } catch (e){
             throw(e);
@@ -94,34 +94,60 @@ class VerificationMgr {
         };
     }
 
-    async log(id,log){
-        if(!id) throw('no id')    
-        if(!log) throw('no log')
+    async addDelivery(delivery){
+        if(!delivery) throw('no delivery')    
+        if(!delivery.verification_id) throw('no delivery.verification_id')
+        if(!delivery.channel) throw('no delivery.channel')
+        if(!delivery.provider_id) throw('no delivery.provider_id')
+        if(!delivery.status) throw('no delivery.status')
         if(!this.pgUrl) throw('no pgUrl set')
 
-        const now=Math.floor (Date.now() / 1000)
-        log.timestamp=now;
-
-        const logS=JSON.stringify([log])
+        delivery.id=sha3(delivery.verification_id+
+                ":"+delivery.channel+":"+delivery.provider_id).slice(2)
         
+
         const client = new Client({
             connectionString: this.pgUrl,
         })
         try{
             await client.connect()
-            console.log(logS)
             const res=await client.query(
-                "UPDATE verifications \
-                    SET log=log || $1::jsonb \
-                  WHERE id=$2"
-                , [ logS,id ]);
+                "INSERT INTO deliveries(id,verification_id,channel,provider_id,status) \
+                      VALUES ($1,$2,$3,$4,$5)"
+                , [ delivery.id, delivery.verification_id, 
+                    delivery.channel , delivery.provider_id, delivery.status ]);
         } catch (e){
             throw(e);
         } finally {
             await client.end()
         }
 
-        return log;
+        return delivery;
+    }
+
+    async updateDelivery(webhookParams){
+        if(!webhookParams) throw('no webhookParams')    
+        if(!webhookParams.MessageSid) throw('no webhookParams.MessageSid')
+        if(!webhookParams.MessageStatus) throw('no webhookParams.MessageStatus')
+        if(!this.pgUrl) throw('no pgUrl set')
+
+        const client = new Client({
+            connectionString: this.pgUrl,
+        })
+        try{
+            await client.connect()
+            const res=await client.query(
+                "UPDATE deliveries \
+                    SET status=$1 \
+                  WHERE provider_id=$2"
+                , [ webhookParams.MessageStatus, webhookParams.MessageSid ]);
+        } catch (e){
+            throw(e);
+        } finally {
+            await client.end()
+        }
+
+        return webhookParams;
     }
 
 }    

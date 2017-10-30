@@ -35,6 +35,13 @@ functions:
      - http:
          path: v3/sms
          method: post
+  v3webhook:
+    handler: src/api-v3_handler.webhook
+    description: Receive delivery status.
+    events:
+     - http:
+         path: v3/webook
+         method: post
   v3call:
     handler: src/api-v3_handler.call
     description: Send code thru phone call
