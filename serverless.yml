@@ -54,7 +54,7 @@ functions:
     description: Verify Code
     events:
      - http:
-         path: v3/sms
+         path: v3/check
          method: post
   v3attestation:
     handler: src/api-v3_handler.attestation
