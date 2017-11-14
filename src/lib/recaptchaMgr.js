@@ -1,3 +1,5 @@
+import rp  from 'request-promise';
+
 class RecaptchaMgr {
     
     constructor() {
@@ -14,8 +16,17 @@ class RecaptchaMgr {
     async isValidToken(reCaptchaToken){
         //Verify token:
         let verificationUrl = "https://www.google.com/recaptcha/api/siteverify"
-        
-        return false;
+        let options = {
+            method: 'POST',
+            uri: verificationUrl,
+            form: {
+                secret: this.recaptchaSecretKey,
+                response: reCaptchaToken
+            },
+        }
+        let resp=await rp(options)
+        //console.log(resp)
+        return resp.success===true;
     }
 
 }    
