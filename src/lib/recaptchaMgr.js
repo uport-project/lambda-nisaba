@@ -13,7 +13,7 @@ class RecaptchaMgr {
         this.recaptchaSecretKey=secrets.RECAPTCHA_SECRET_KEY;
     }
 
-    async isValidToken(reCaptchaToken){
+    async verifyToken(reCaptchaToken){
         //Verify token:
         let verificationUrl = "https://www.google.com/recaptcha/api/siteverify"
         let options = {
@@ -25,8 +25,7 @@ class RecaptchaMgr {
             },
         }
         let resp=await rp(options)
-        //console.log(resp)
-        return resp.success===true;
+        return JSON.parse(resp)
     }
 
 }    
