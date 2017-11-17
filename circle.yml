@@ -12,7 +12,7 @@ dependencies:
 deployment:
   develop:
     branch:
-      - feature/ch1789/add-ci-cd-for-lambda
+      - develop
     commands:
     - sls deploy --stage develop
   master:
