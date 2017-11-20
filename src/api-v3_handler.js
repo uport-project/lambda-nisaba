@@ -21,12 +21,14 @@ module.exports.funcaptcha = (event, context, callback) => { postHandler(funcaptc
 
 const postHandler = (handler,event,context,callback) =>{
   if(!recaptchaMgr.isSecretsSet() ||
+     !funcaptchaMgr.isSecretsSet() ||
      !fuelTokenMgr.isSecretsSet() ){
     kms.decrypt({
       CiphertextBlob: Buffer(process.env.SECRETS, 'base64')
     }).promise().then(data => {
       const decrypted = String(data.Plaintext)
       recaptchaMgr.setSecrets(JSON.parse(decrypted))
+      funcaptchaMgr.setSecrets(JSON.parse(decrypted))
       fuelTokenMgr.setSecrets(JSON.parse(decrypted))
       doHandler(handler,event,context,callback)
     })

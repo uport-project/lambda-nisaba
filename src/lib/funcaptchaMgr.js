@@ -14,9 +14,12 @@ class FuncaptchaMgr {
     }
 
     async verifyToken(funCaptchaToken){
+        if(!funCaptchaToken) throw('no funCaptchaToken')    
+        if(!this.funcaptchaPrivateKey) throw('no funcaptchaPrivateKey set')
         //Verify token:
         let verificationUrl = "https://funcaptcha.com/fc/v/?private_key="+this.funcaptchaPrivateKey+
                                 "&session_token="+funCaptchaToken
+        
         let options = {
             method: 'GET',
             uri: verificationUrl
