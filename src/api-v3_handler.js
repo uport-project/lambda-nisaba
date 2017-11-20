@@ -4,15 +4,20 @@ const kms = new AWS.KMS();
 const querystring = require('querystring');
 
 const RecaptchaMgr = require('./lib/recaptchaMgr');
+const FuncaptchaMgr = require('./lib/funcaptchaMgr');
 const FuelTokenMgr = require('./lib/fuelTokenMgr');
 
 const RecaptchaHandler = require('./api-v3/recaptcha');
+const FuncaptchaHandler = require('./api-v3/funcaptcha');
 
 let recaptchaMgr = new RecaptchaMgr();
+let funcaptchaMgr = new FuncaptchaMgr();
 let fuelTokenMgr = new FuelTokenMgr();
 
 let recaptchaHandler = new RecaptchaHandler(recaptchaMgr,fuelTokenMgr);
 module.exports.recaptcha = (event, context, callback) => { postHandler(recaptchaHandler,event,context,callback) }
+let funcaptchaHandler = new FuncaptchaHandler(funcaptchaMgr,fuelTokenMgr);
+module.exports.funcaptcha = (event, context, callback) => { postHandler(funcaptchaHandler,event,context,callback) }
 
 const postHandler = (handler,event,context,callback) =>{
   if(!recaptchaMgr.isSecretsSet() ||

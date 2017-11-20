@@ -35,4 +35,11 @@ functions:
      - http:
          path: v3/recaptcha
          method: post
+  v3funcaptcha:
+    handler: src/api-v3_handler.funcaptcha
+    description: Validate Funcaptcha Code
+    events:
+     - http:
+         path: v3/funcaptcha
+         method: post
   
