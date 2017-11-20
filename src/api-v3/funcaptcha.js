@@ -29,7 +29,12 @@ class FuncaptchaHandler {
 
             if (!verificationResp.solved===true){
                 console.error(verificationResp);
-                let message="error verifying token: "+verificationResp.error
+                let message;
+                if(verificationResp.solved===false){
+                    message="error verifying token: solved:false";
+                }else{
+                    message="error verifying token: "+verificationResp.error
+                }
                 throw({code: 400, message: message})
             }
             
