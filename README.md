@@ -6,17 +6,17 @@ Lambda functions for verifying phone numbers
 [Diagrams](./diagrams/README.md)
 
 ## Description
-Nisaba provides phone verification for the uPort ecosystem. This is the lamba-function version of it
+Nisaba provides user verification for the uPort ecosystem.
 
-## API v2
+## API
 
-### Request Phone Attestation
+### Request Fuel Token for New Device Key
 
-The nisaba token / fuel token can be used to get a real uPort phone attestation.
+A verified user can request a new fuel token for a new deviceKey 
 
 ### Endpoint
 
-`POST /v2/phone`
+`POST /newDeviceKey`
 
 ### Headers
 ```
@@ -25,16 +25,21 @@ Authorization: Bearer <nisaba token/fuel token>
 ### Body
 ```
 {
-  uPortId: <uport id (mnid)>
+  requestToken: <jwt signed by deviceKey>
 }
 ```
-
+The payload of the requestToken should be:
+```
+{
+  newDeviceKey: <address of the new device key>
+}
+```
 
 #### Response
 
 | Status |     Message    |                               |
 |:------:|----------------|-------------------------------|
-| 201    | Ok             | Attestation                   |
+| 200    | Ok             | Fuel Token                    |
 | 403    | Forbidden      | JWT token missing or invalid  |
 | 500    | Internal Error | Internal error                |
 
@@ -43,10 +48,10 @@ Token stored in `code` is deleted after JWT expiration date
 ```
 {
   'status':  'success',
-  'data': <attestation>
+  'data': <fuel token for new deviceKey>
 }
 ```
 
 ### Sequence Diagram
 
-![Phone Seq](./diagrams/img/phone.seq.v2.png)
+![newDeviceKey Seq](./diagrams/img/newDeviceKey.seq.png)

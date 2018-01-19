@@ -6,23 +6,32 @@ const querystring = require('querystring');
 const RecaptchaMgr = require('./lib/recaptchaMgr');
 const FuncaptchaMgr = require('./lib/funcaptchaMgr');
 const FuelTokenMgr = require('./lib/fuelTokenMgr');
+const DeviceKeyTokenMgr = require('./lib/deviceKeyTokenMgr');
 
 const RecaptchaHandler = require('./handlers/recaptcha');
 const FuncaptchaHandler = require('./handlers/funcaptcha');
+const NewDeviceKeyHandler = require('./handlers/newDeviceKey');
 
 let recaptchaMgr = new RecaptchaMgr();
 let funcaptchaMgr = new FuncaptchaMgr();
 let fuelTokenMgr = new FuelTokenMgr();
+let deviceKeyTokenMgr = new DeviceKeyTokenMgr();
+
 
 let recaptchaHandler = new RecaptchaHandler(recaptchaMgr,fuelTokenMgr);
-module.exports.recaptcha = (event, context, callback) => { postHandler(recaptchaHandler,event,context,callback) }
 let funcaptchaHandler = new FuncaptchaHandler(funcaptchaMgr,fuelTokenMgr);
+let newDeviceKeyHandler = new NewDeviceKeyHandler(deviceKeyTokenMgr,fuelTokenMgr);
+
+
+module.exports.recaptcha = (event, context, callback) => { postHandler(recaptchaHandler,event,context,callback) }
 module.exports.funcaptcha = (event, context, callback) => { postHandler(funcaptchaHandler,event,context,callback) }
+module.exports.newDeviceKey = (event, context, callback) => { postHandler(newDeviceKeyHandler,event,context,callback) }
 
 const postHandler = (handler,event,context,callback) =>{
   if(!recaptchaMgr.isSecretsSet() ||
      !funcaptchaMgr.isSecretsSet() ||
-     !fuelTokenMgr.isSecretsSet() ){
+     !fuelTokenMgr.isSecretsSet() ||
+     !deviceKeyTokenMgr.isSecretsSet() ){
     kms.decrypt({
       CiphertextBlob: Buffer(process.env.SECRETS, 'base64')
     }).promise().then(data => {
@@ -30,6 +39,7 @@ const postHandler = (handler,event,context,callback) =>{
       recaptchaMgr.setSecrets(JSON.parse(decrypted))
       funcaptchaMgr.setSecrets(JSON.parse(decrypted))
       fuelTokenMgr.setSecrets(JSON.parse(decrypted))
+      deviceKeyTokenMgr.setSecrets(JSON.parse(decrypted))
       doHandler(handler,event,context,callback)
     })
   }else{
