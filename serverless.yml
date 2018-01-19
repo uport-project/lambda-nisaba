@@ -28,18 +28,24 @@ custom:
 
 # Implemented lambda funcionts
 functions:
-  v3recaptcha:
-    handler: src/api-v3_handler.recaptcha
+  recaptcha:
+    handler: src/api_handler.recaptcha
     description: Validate Recaptcha Code
     events:
      - http:
-         path: v3/recaptcha
+         path: v3/recaptcha #Legacy
          method: post
-  v3funcaptcha:
-    handler: src/api-v3_handler.funcaptcha
+     - http:
+         path: recaptcha
+         method: post
+  funcaptcha:
+    handler: src/api_handler.funcaptcha
     description: Validate Funcaptcha Code
     events:
      - http:
-         path: v3/funcaptcha
+         path: v3/funcaptcha #Legacy
+         method: post
+     - http:
+         path: funcaptcha
          method: post
   
