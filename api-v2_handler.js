@@ -3,7 +3,7 @@
 const PhoneHandler = require('./api-v2/phone');
 const AttestationMgr = require('./lib/attestationMgr');
 
-let attestationMgr = new AttestationMgr(process.env.SIGNER_KEY,process.env.APP_NAME,process.env.APP_NAME);
+let attestationMgr = new AttestationMgr(secrets.SIGNER_KEY,secrets.APP_NAME,secrets.APP_NAME);
 
 let phoneHandler = new PhoneHandler(attestationMgr);
 
@@ -28,7 +28,7 @@ module.exports.phone = (event, context, callback) => {
       if(err.code) code=err.code;
       let message=err;
       if(err.message) message=err.message;
-      
+
       response = {
         statusCode: code,
         body: JSON.stringify({
