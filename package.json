@@ -1,6 +1,6 @@
 {
   "name": "lambda-nisaba",
-  "version": "0.0.1",
+  "version": "3.0.0",
   "description": "uPort Phone verification service",
   "main": "index.js",
   "scripts": {
@@ -24,8 +24,12 @@
     "jest": "^21.2.0"
   },
   "dependencies": {
+    "jwt-js": "^0.5.0",
+    "querystring": "^0.2.0",
+    "request": "^2.83.0",
+    "request-promise": "^4.2.2",
+    "serverless-kms-secrets": "^1.0.2",
     "serverless-webpack": "^3.1.0",
-    "uport": "^0.5.4",
     "webpack": "^3.6.0",
     "webpack-node-externals": "^1.6.0"
   }

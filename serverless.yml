@@ -5,24 +5,41 @@ provider:
   runtime: nodejs6.10
   stage: develop
   region: us-west-2
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+      - KMS:Decrypt
+      Resource: ${self:custom.kmsSecrets.keyArn}
+  environment:
+      SECRETS: ${self:custom.kmsSecrets.secrets.SECRETS}
 
 # Use the serverless-webpack plugin to transpile ES6
 plugins:
   - serverless-webpack
+  - serverless-kms-secrets
+
 
 # Enable auto-packing of external modules
 custom:
   webpackIncludeModules: true
+  serverless-kms-secrets:
+    secretsFile: kms-secrets.${opt:stage, self:provider.stage}.${opt:region, self:provider.region}.yml
+  kmsSecrets: ${file(kms-secrets.${opt:stage, self:provider.stage}.${opt:region, self:provider.region}.yml)}
 
+# Implemented lambda funcionts
 functions:
-  phone:
-    handler: src/api-v2_handler.phone
-    description: Create phone attestations
+  v3recaptcha:
+    handler: src/api-v3_handler.recaptcha
+    description: Validate Recaptcha Code
     events:
      - http:
-         path: v2/phone
+         path: v3/recaptcha
          method: post
-    environment:
-      SIGNER_KEY: 746c06333df9d76c533783bb04aea008cb44e48cda1733dafa9eb65302a2e011
-      APP_NAME: 'ConsenSys Verification Services (test:ajunge)'
-      APP_MNID: '2owhy1rcRzt2DiYd95ov5aKkzyzcJCCJGMG'
+  v3funcaptcha:
+    handler: src/api-v3_handler.funcaptcha
+    description: Validate Funcaptcha Code
+    events:
+     - http:
+         path: v3/funcaptcha
+         method: post
+  
