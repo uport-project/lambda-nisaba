@@ -62,3 +62,5 @@ typings/
 
 curl_scripts/
 .webpack/
+
+.DS_Store
