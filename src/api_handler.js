@@ -7,8 +7,8 @@ const RecaptchaMgr = require('./lib/recaptchaMgr');
 const FuncaptchaMgr = require('./lib/funcaptchaMgr');
 const FuelTokenMgr = require('./lib/fuelTokenMgr');
 
-const RecaptchaHandler = require('./api-v3/recaptcha');
-const FuncaptchaHandler = require('./api-v3/funcaptcha');
+const RecaptchaHandler = require('./handlers/recaptcha');
+const FuncaptchaHandler = require('./handlers/funcaptcha');
 
 let recaptchaMgr = new RecaptchaMgr();
 let funcaptchaMgr = new FuncaptchaMgr();
