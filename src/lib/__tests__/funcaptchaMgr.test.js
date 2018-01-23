@@ -1,9 +1,9 @@
 const FuncaptchaMgr = require('../funcaptchaMgr');
 
 describe('FuncaptchaMgr', () => {
-    
+
     let sut;
-    
+
     beforeAll(() => {
         sut = new FuncaptchaMgr();
     });

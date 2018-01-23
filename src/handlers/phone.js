@@ -1,10 +1,10 @@
-import { decodeToken, TokenVerifier } from 'jsontokens'
 import { Credentials, SimpleSigner } from 'uport'
 
-class PhoneHandler{
+class PhoneHandler {
 
-    constructor(attestationMgr) {
+    constructor(attestationMgr, fuelTokenMgr) {
         this.attestationMgr = attestationMgr;
+        this.fuelTokenMgr = fuelTokenMgr;
     }
 
     debug(l){
@@ -14,7 +14,7 @@ class PhoneHandler{
     async handle(body, cb) {
         //Check empty body
         if(!body){
-            cb({code:403, message:'no body'})
+            cb({code:400, message:'no body'})
             return;
         }
         if (body.token === undefined){
@@ -22,8 +22,7 @@ class PhoneHandler{
           return;
         } else {
           try{
-            let verified = new TokenVerifier(
-              'ES256k', secrets.PUBLIC_KEY).verify(body.token)
+            let verified = await this.fuelTokenMgr.verifiy(body.token)
             if (!verified){
               cb({code:400, message:'cannot verify token'})
               return;
@@ -35,7 +34,7 @@ class PhoneHandler{
           }
         }
 
-        let fuelToken = decodeToken(body.token).payload
+        let fuelToken = await this.fuelTokenMgr.decode(body.token).payload
         let phoneNumber=fuelToken.phoneNumber
 
         if (body.uportId === undefined){

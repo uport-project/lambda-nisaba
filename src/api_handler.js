@@ -9,6 +9,7 @@ const FuelTokenMgr = require('./lib/fuelTokenMgr');
 
 const RecaptchaHandler = require('./handlers/recaptcha');
 const FuncaptchaHandler = require('./handlers/funcaptcha');
+const PhoneHandler = require('./handlers/phone');
 
 let recaptchaMgr = new RecaptchaMgr();
 let funcaptchaMgr = new FuncaptchaMgr();
@@ -18,6 +19,8 @@ let recaptchaHandler = new RecaptchaHandler(recaptchaMgr,fuelTokenMgr);
 module.exports.recaptcha = (event, context, callback) => { postHandler(recaptchaHandler,event,context,callback) }
 let funcaptchaHandler = new FuncaptchaHandler(funcaptchaMgr,fuelTokenMgr);
 module.exports.funcaptcha = (event, context, callback) => { postHandler(funcaptchaHandler,event,context,callback) }
+let phoneHandler = new PhoneHandler(attestationMgr, fuelTokenMgr);
+module.exports.phone = (event, context, callback) => { postHandler(phoneHandler,event,context,callback) }
 
 const postHandler = (handler,event,context,callback) =>{
   if(!recaptchaMgr.isSecretsSet() ||
@@ -41,9 +44,9 @@ const doHandler = (handler,event,context,callback) =>{
   //console.log(event.headers["content-type"])
   //console.log(event.body)
   let body;
-  try{ 
+  try{
     if(event.headers["content-type"].match(/application\/json/)){
-      body = JSON.parse(event.body) 
+      body = JSON.parse(event.body)
     }else{
       body=querystring.parse(event.body)
     }
@@ -66,7 +69,7 @@ const doHandler = (handler,event,context,callback) =>{
       if(err.code) code=err.code;
       let message=err;
       if(err.message) message=err.message;
-      
+
       response = {
         statusCode: code,
         body: JSON.stringify({
@@ -79,4 +82,4 @@ const doHandler = (handler,event,context,callback) =>{
     callback(null, response)
   })
 
-} 
+}
