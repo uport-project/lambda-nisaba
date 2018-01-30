@@ -1,4 +1,7 @@
 import { publicToAddress } from 'ethjs-account';
+import { pubToAddress } from 'ethereumjs-util';
+import { keccak_256 } from 'js-sha3';
+import sha3 from 'ethjs-sha3';
 
 class NewDeviceKeyHandler {
 
@@ -55,22 +58,41 @@ class NewDeviceKeyHandler {
         }
         //console.log(dRequestToken);
 
+        console.log("ISS MNID ADDR   : "+require('mnid').decode(dRequestToken.payload.iss).address)
+
         //The address is the Keccak 256(publickey)
         //the last 20 bytes
         //https://github.com/ConsenSys/uport-mobile/blob/49e2dbed002aef36c08f3ae5ba09103ec187cf7d/ios/uPortMobile/Classes/UPTHDSigner.m#L205
 
         const pubKey=dRequestToken.profile.publicKey;
-        console.log(pubKey)
+        //console.log(pubKey)
+        //console.log(pubKey.length)
+        const pubKey2=pubKey.slice(4);
+        //console.log(pubKey2)
+        //console.log(pubKey2.length)
+
+        const keccakHash=keccak_256(pubKey2);
+        //const keccakHash=sha3(pubKey2);
+        //console.log(keccakHash)
+        //console.log(keccakHash.length)
+
+        const address0 = '0x'+keccakHash.slice(-40)
+        console.log("HANDMADE        : "+address0)
+        //console.log(address0.length)
+
         
         //https://github.com/ethjs/ethjs-account/blob/master/src/index.js#L88
-        const address = publicToAddress(new Buffer(pubKey.slice(2), 'hex'));
-        console.log(address)
+        const address1 = publicToAddress(new Buffer(pubKey.slice(4), 'hex'));
+        console.log("ETHJS-ACCOUNT   : "+address1)
 
 
-        console.log(authToken.sub)
+        const address2 = pubToAddress(new Buffer(pubKey.slice(4), 'hex'));
+        console.log("ETHEREUMJS_UTILS: "+'0x'+address2.toString('hex'))
 
+        console.log("FUEL TOKEN ADDR : "+authToken.sub)
+        
         //Check if address on fuelToken (authToken) is the same as the one on the requesToken
-        if(address != authToken.sub){
+        if(address0 != authToken.sub){
             console.log("authToken.sub !== decodedRequestToken..address")
             cb({ code: 403, message: 'Auth token mismatch. Does not match `address` derived from requestToken' })
             return;
