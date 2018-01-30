@@ -19,7 +19,6 @@ class NewDeviceKeyHandler {
             return;
         }
 
-        console.log(authToken.sub)
 
         let body;
 
@@ -66,6 +65,9 @@ class NewDeviceKeyHandler {
         //https://github.com/ethjs/ethjs-account/blob/master/src/index.js#L88
         const address = publicToAddress(new Buffer(pubKey.slice(2), 'hex'));
         console.log(address)
+
+
+        console.log(authToken.sub)
 
         //Check if address on fuelToken (authToken) is the same as the one on the requesToken
         if(address != authToken.sub){
