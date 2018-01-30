@@ -1,5 +1,4 @@
-import { keccak_256 } from "js-sha3";
-
+import { publicToAddress } from 'ethjs-account';
 
 class NewDeviceKeyHandler {
 
@@ -20,7 +19,7 @@ class NewDeviceKeyHandler {
             return;
         }
 
-        //console.log(authToken)
+        console.log(authToken.sub)
 
         let body;
 
@@ -55,14 +54,18 @@ class NewDeviceKeyHandler {
             cb({ code: 500, message: errMsg })
             return;
         }
-        console.log(dRequestToken);
+        //console.log(dRequestToken);
 
         //The address is the Keccak 256(publickey)
         //the last 20 bytes
         //https://github.com/ConsenSys/uport-mobile/blob/49e2dbed002aef36c08f3ae5ba09103ec187cf7d/ios/uPortMobile/Classes/UPTHDSigner.m#L205
 
         const pubKey=dRequestToken.profile.publicKey;
-        const address = keccak_256(pubKey).slice(12,42);
+        console.log(pubKey)
+        
+        //https://github.com/ethjs/ethjs-account/blob/master/src/index.js#L88
+        const address = publicToAddress(new Buffer(pubKey.slice(2), 'hex'));
+        console.log(address)
 
         //Check if address on fuelToken (authToken) is the same as the one on the requesToken
         if(address != authToken.sub){
