@@ -54,6 +54,13 @@ functions:
      - http:
          path: newDeviceKey
          method: post
+  phone:
+    handler: src/api_handler.phone
+    description: Get a an attestiong for the verified phone on the fuelToken
+    events:
+     - http:
+         path: newDeviceKey
+         method: post
 
 
   
