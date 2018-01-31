@@ -1,7 +1,7 @@
 import { publicToAddress } from 'ethjs-account';
 import { pubToAddress } from 'ethereumjs-util';
 import { keccak_256 } from 'js-sha3';
-import sha3 from 'ethjs-sha3';
+import sha3 from 'js-sha3';
 
 class NewDeviceKeyHandler {
 
@@ -65,7 +65,7 @@ class NewDeviceKeyHandler {
         //https://github.com/ConsenSys/uport-mobile/blob/49e2dbed002aef36c08f3ae5ba09103ec187cf7d/ios/uPortMobile/Classes/UPTHDSigner.m#L205
 
         const pubKey=dRequestToken.profile.publicKey;
-        //console.log(pubKey)
+        console.log(pubKey)
         //console.log(pubKey.length)
         const pubKey2=pubKey.slice(4);
         //console.log(pubKey2)
@@ -88,6 +88,10 @@ class NewDeviceKeyHandler {
 
         const address2 = pubToAddress(new Buffer(pubKey.slice(4), 'hex'));
         console.log("ETHEREUMJS_UTILS: "+'0x'+address2.toString('hex'))
+
+        const address3 = sha3.keccak_256(new Buffer(pubKey.slice(4), 'hex')).slice(-40)
+        console.log("PELITO STYLE    : "+'0x'+address3)
+
 
         console.log("FUEL TOKEN ADDR : "+authToken.sub)
         
