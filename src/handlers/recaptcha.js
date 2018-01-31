@@ -6,12 +6,23 @@ class RecaptchaHandler {
         this.fuelTokenMgr = fuelTokenMgr;
     }
 
-    async handle(body, cb) {
-        //Check null body
-        if(!body){
-            cb({code:400, message:'no body'})
+    async handle(event, context, cb) {
+        let body;
+
+        if (event && !event.body){
+            body = event
+        } else if (event && event.body) {
+            try {
+                body = JSON.parse(event.body)
+            } catch (e) {
+                cb({ code: 400, message: 'no json body'})
+                return;
+            }
+        } else {
+            cb({code: 400, message: 'no json body'})
             return;
         }
+
         //Check empty deviceKey
         if(!body.deviceKey){
             cb({code:400, message:'no deviceKey'})

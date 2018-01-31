@@ -2,12 +2,12 @@
 
 #### Contents
 
-- [Phone Seq V 2](#phone-seq-v-2)
+- [Newdevicekey Seq](#newdevicekey-seq)
 - [How to write diagrams](#how-to-write-diagrams)
 - [How to generate diagrams](#how-to-generate-diagrams)
 
-#### Phone Seq V 2
-![Phone Seq V 2](./img/phone.seq.v2.png)
+#### Newdevicekey Seq
+![Newdevicekey Seq](./img/newDeviceKey.seq.png)
 
 #### How to write diagrams
 
