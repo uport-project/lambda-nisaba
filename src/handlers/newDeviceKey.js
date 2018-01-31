@@ -1,6 +1,3 @@
-import { publicToAddress } from 'ethjs-account';
-import { pubToAddress } from 'ethereumjs-util';
-import { keccak_256 } from 'js-sha3';
 import sha3 from 'js-sha3';
 
 class NewDeviceKeyHandler {
