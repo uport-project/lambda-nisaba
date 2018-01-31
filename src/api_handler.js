@@ -5,26 +5,37 @@ const querystring = require('querystring');
 
 const RecaptchaMgr = require('./lib/recaptchaMgr');
 const FuncaptchaMgr = require('./lib/funcaptchaMgr');
+const AuthMgr = require('./lib/authMgr');
 const FuelTokenMgr = require('./lib/fuelTokenMgr');
+const UPortMgr = require('./lib/uPortMgr');
 
 const RecaptchaHandler = require('./handlers/recaptcha');
 const FuncaptchaHandler = require('./handlers/funcaptcha');
+const NewDeviceKeyHandler = require('./handlers/newDeviceKey');
 const PhoneHandler = require('./handlers/phone');
 
 let recaptchaMgr = new RecaptchaMgr();
 let funcaptchaMgr = new FuncaptchaMgr();
+let authMgr = new AuthMgr();
 let fuelTokenMgr = new FuelTokenMgr();
+let uPortMgr = new UPortMgr();
+
 
 let recaptchaHandler = new RecaptchaHandler(recaptchaMgr,fuelTokenMgr);
-module.exports.recaptcha = (event, context, callback) => { postHandler(recaptchaHandler,event,context,callback) }
 let funcaptchaHandler = new FuncaptchaHandler(funcaptchaMgr,fuelTokenMgr);
-module.exports.funcaptcha = (event, context, callback) => { postHandler(funcaptchaHandler,event,context,callback) }
+let newDeviceKeyHandler = new NewDeviceKeyHandler(authMgr,uPortMgr,fuelTokenMgr);
 let phoneHandler = new PhoneHandler(attestationMgr, fuelTokenMgr);
+
+
+module.exports.recaptcha = (event, context, callback) => { postHandler(recaptchaHandler,event,context,callback) }
+module.exports.funcaptcha = (event, context, callback) => { postHandler(funcaptchaHandler,event,context,callback) }
+module.exports.newDeviceKey = (event, context, callback) => { postHandler(newDeviceKeyHandler,event,context,callback) }
 module.exports.phone = (event, context, callback) => { postHandler(phoneHandler,event,context,callback) }
 
 const postHandler = (handler,event,context,callback) =>{
   if(!recaptchaMgr.isSecretsSet() ||
      !funcaptchaMgr.isSecretsSet() ||
+     !authMgr.isSecretsSet() ||
      !fuelTokenMgr.isSecretsSet() ){
     kms.decrypt({
       CiphertextBlob: Buffer(process.env.SECRETS, 'base64')
@@ -32,6 +43,7 @@ const postHandler = (handler,event,context,callback) =>{
       const decrypted = String(data.Plaintext)
       recaptchaMgr.setSecrets(JSON.parse(decrypted))
       funcaptchaMgr.setSecrets(JSON.parse(decrypted))
+      authMgr.setSecrets(JSON.parse(decrypted))
       fuelTokenMgr.setSecrets(JSON.parse(decrypted))
       doHandler(handler,event,context,callback)
     })
@@ -41,19 +53,7 @@ const postHandler = (handler,event,context,callback) =>{
 }
 
 const doHandler = (handler,event,context,callback) =>{
-  //console.log(event.headers["content-type"])
-  //console.log(event.body)
-  let body;
-  try{
-    if(event.headers["content-type"].match(/application\/json/)){
-      body = JSON.parse(event.body)
-    }else{
-      body=querystring.parse(event.body)
-    }
-  } catch(e){
-    console.log(e);body={}
-  }
-  handler.handle(body,(err,resp)=>{
+  handler.handle(event,context,(err,resp)=>{
     let response;
     if(err==null){
       response = {

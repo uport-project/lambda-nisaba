@@ -17,16 +17,16 @@ describe('FuncaptchaHandler', () => {
     });
 
     test('handle null body', done => {
-        sut.handle(null,(err,res)=>{
+        sut.handle(undefined,null,(err,res)=>{
             expect(err).not.toBeNull()
             expect(err.code).toEqual(400)
-            expect(err.message).toEqual('no body')
+            expect(err.message).toEqual('no json body')
             done();
         })
     });
 
     test('handle empty deviceKey', done => {
-        sut.handle({funCaptchaToken: funCaptchaToken},(err,res)=>{
+        sut.handle({funCaptchaToken: funCaptchaToken},{},(err,res)=>{
             expect(err).not.toBeNull()
             expect(err.code).toEqual(400)
             expect(err.message).toEqual('no deviceKey')
@@ -35,7 +35,7 @@ describe('FuncaptchaHandler', () => {
     })
 
     test('handle empty funCaptchaToken', done => {
-        sut.handle({deviceKey: deviceKey},(err,res)=>{
+        sut.handle({deviceKey: deviceKey},{},(err,res)=>{
             expect(err).not.toBeNull()
             expect(err.code).toEqual(400)
             expect(err.message).toEqual('no funCaptchaToken')
@@ -44,7 +44,7 @@ describe('FuncaptchaHandler', () => {
     })
 
     test('call funcaptchaMgr.verifyToken()', done => {
-        sut.handle({deviceKey: deviceKey, funCaptchaToken: funCaptchaToken },(err,res)=>{
+        sut.handle({deviceKey: deviceKey, funCaptchaToken: funCaptchaToken },{},(err,res)=>{
             expect(funcaptchaMgrMock.verifyToken).toBeCalled();
             expect(funcaptchaMgrMock.verifyToken).toBeCalledWith(funCaptchaToken);
             done();
@@ -53,7 +53,7 @@ describe('FuncaptchaHandler', () => {
 
     test('call fuelTokenMgr.newToken()', done => {
         funcaptchaMgrMock.verifyToken.mockImplementation(()=>{ return {solved: true} })
-        sut.handle({deviceKey: deviceKey, funCaptchaToken: funCaptchaToken },(err,res)=>{
+        sut.handle({deviceKey: deviceKey, funCaptchaToken: funCaptchaToken },{},(err,res)=>{
             expect(fuelTokenMgrMock.newToken).toBeCalled();
             expect(fuelTokenMgrMock.newToken).toBeCalledWith(deviceKey);
             done();
@@ -64,7 +64,7 @@ describe('FuncaptchaHandler', () => {
         funcaptchaMgrMock.verifyToken.mockImplementation(()=>{
             throw("throwed error")
         });
-        sut.handle({deviceKey: deviceKey, funCaptchaToken: funCaptchaToken },(err,res)=>{
+        sut.handle({deviceKey: deviceKey, funCaptchaToken: funCaptchaToken },{},(err,res)=>{
             expect(funcaptchaMgrMock.verifyToken).toBeCalled();
             expect(err).not.toBeNull()
             expect(err).toEqual('throwed error')
@@ -76,7 +76,7 @@ describe('FuncaptchaHandler', () => {
         funcaptchaMgrMock.verifyToken.mockImplementation(()=>{
             throw({message:"throwed error"})
         });
-        sut.handle({deviceKey: deviceKey, funCaptchaToken: funCaptchaToken },(err,res)=>{
+        sut.handle({deviceKey: deviceKey, funCaptchaToken: funCaptchaToken },{},(err,res)=>{
             expect(funcaptchaMgrMock.verifyToken).toBeCalled();
             expect(err).not.toBeNull()
             expect(err).toEqual({"message": "throwed error"})

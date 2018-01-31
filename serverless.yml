@@ -47,3 +47,16 @@ functions:
      - http:
          path: funcaptcha
          method: post
+<<<<<<< HEAD
+=======
+  newDeviceKey:
+    handler: src/api_handler.newDeviceKey
+    description: Get a new fuel token by sending a signed requestToken
+    events:
+     - http:
+         path: newDeviceKey
+         method: post
+
+
+  
+>>>>>>> develop

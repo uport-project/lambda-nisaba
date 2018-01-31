@@ -17,16 +17,16 @@ describe('RecaptchaHandler', () => {
     });
 
     test('handle null body', done => {
-        sut.handle(null,(err,res)=>{
+        sut.handle(null,{},(err,res)=>{
             expect(err).not.toBeNull()
             expect(err.code).toEqual(400)
-            expect(err.message).toEqual('no body')
+            expect(err.message).toEqual('no json body')
             done();
         })
     });
 
     test('handle empty deviceKey', done => {
-        sut.handle({reCaptchaToken: reCaptchaToken},(err,res)=>{
+        sut.handle({reCaptchaToken: reCaptchaToken},{},(err,res)=>{
             expect(err).not.toBeNull()
             expect(err.code).toEqual(400)
             expect(err.message).toEqual('no deviceKey')
@@ -35,7 +35,7 @@ describe('RecaptchaHandler', () => {
     })
 
     test('handle empty reCaptchaToken', done => {
-        sut.handle({deviceKey: deviceKey},(err,res)=>{
+        sut.handle({deviceKey: deviceKey},{},(err,res)=>{
             expect(err).not.toBeNull()
             expect(err.code).toEqual(400)
             expect(err.message).toEqual('no reCaptchaToken')
@@ -44,7 +44,7 @@ describe('RecaptchaHandler', () => {
     })
 
     test('call recaptchaMgr.verifyToken()', done => {
-        sut.handle({deviceKey: deviceKey, reCaptchaToken: reCaptchaToken },(err,res)=>{
+        sut.handle({deviceKey: deviceKey, reCaptchaToken: reCaptchaToken },{},(err,res)=>{
             expect(recaptchaMgrMock.verifyToken).toBeCalled();
             expect(recaptchaMgrMock.verifyToken).toBeCalledWith(reCaptchaToken);
             done();
@@ -53,7 +53,7 @@ describe('RecaptchaHandler', () => {
 
     test('call fuelTokenMgr.newToken()', done => {
         recaptchaMgrMock.verifyToken.mockImplementation(()=>{ return {success: true} })
-        sut.handle({deviceKey: deviceKey, reCaptchaToken: reCaptchaToken },(err,res)=>{
+        sut.handle({deviceKey: deviceKey, reCaptchaToken: reCaptchaToken },{},(err,res)=>{
             expect(fuelTokenMgrMock.newToken).toBeCalled();
             expect(fuelTokenMgrMock.newToken).toBeCalledWith(deviceKey);
             done();
@@ -64,7 +64,7 @@ describe('RecaptchaHandler', () => {
         recaptchaMgrMock.verifyToken.mockImplementation(()=>{
             throw("throwed error")
         });
-        sut.handle({deviceKey: deviceKey, reCaptchaToken: reCaptchaToken },(err,res)=>{
+        sut.handle({deviceKey: deviceKey, reCaptchaToken: reCaptchaToken },{},(err,res)=>{
             expect(recaptchaMgrMock.verifyToken).toBeCalled();
             expect(err).not.toBeNull()
             expect(err).toEqual('throwed error')
@@ -76,7 +76,7 @@ describe('RecaptchaHandler', () => {
         recaptchaMgrMock.verifyToken.mockImplementation(()=>{
             throw({message:"throwed error"})
         });
-        sut.handle({deviceKey: deviceKey, reCaptchaToken: reCaptchaToken },(err,res)=>{
+        sut.handle({deviceKey: deviceKey, reCaptchaToken: reCaptchaToken },{},(err,res)=>{
             expect(recaptchaMgrMock.verifyToken).toBeCalled();
             expect(err).not.toBeNull()
             expect(err).toEqual({"message": "throwed error"})
