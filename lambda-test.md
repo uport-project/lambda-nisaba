@@ -6,7 +6,7 @@ https://nrtlidv3of.execute-api.us-west-2.amazonaws.com/develop/v2/phone
 
 1) Get an activation code
 ```
-curl --data '{"deviceKey": "0x123456", "phoneNumber": "56990137483"}' https://nisaba.uport.me/api/v1/mobile
+curl --data '{"deviceKey": "0x123456", "phoneNumber": "5688425841"}' https://nisaba.uport.me/api/v1/mobile
 ```
 
 2) Retrieve token via the activation code
