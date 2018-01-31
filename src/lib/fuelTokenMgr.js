@@ -13,7 +13,7 @@ class FuelTokenMgr {
 
     setSecrets(secrets){
         this.signingKey=secrets.FUEL_TOKEN_PRIVATE_KEY;
-        this.publicKey=secrets.PUBLIC_KEY;
+        this.publicKey=secrets.FUEL_TOKEN_PUBLIC_KEY;
         this.tokenSigner=new TokenSigner('ES256K', this.signingKey)
     }
 
