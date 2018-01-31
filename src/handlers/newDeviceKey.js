@@ -12,6 +12,7 @@ class NewDeviceKeyHandler {
     }
 
     async handle(event, context, cb) {
+        
         let authToken;
         try{
             authToken = await this.authMgr.verifyNisaba(event)
