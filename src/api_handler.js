@@ -12,6 +12,7 @@ const UPortMgr = require('./lib/uPortMgr');
 const RecaptchaHandler = require('./handlers/recaptcha');
 const FuncaptchaHandler = require('./handlers/funcaptcha');
 const NewDeviceKeyHandler = require('./handlers/newDeviceKey');
+const PhoneHandler = require('./handlers/phone');
 
 let recaptchaMgr = new RecaptchaMgr();
 let funcaptchaMgr = new FuncaptchaMgr();
@@ -23,11 +24,13 @@ let uPortMgr = new UPortMgr();
 let recaptchaHandler = new RecaptchaHandler(recaptchaMgr,fuelTokenMgr);
 let funcaptchaHandler = new FuncaptchaHandler(funcaptchaMgr,fuelTokenMgr);
 let newDeviceKeyHandler = new NewDeviceKeyHandler(authMgr,uPortMgr,fuelTokenMgr);
+let phoneHandler = new PhoneHandler(attestationMgr, fuelTokenMgr);
 
 
 module.exports.recaptcha = (event, context, callback) => { postHandler(recaptchaHandler,event,context,callback) }
 module.exports.funcaptcha = (event, context, callback) => { postHandler(funcaptchaHandler,event,context,callback) }
 module.exports.newDeviceKey = (event, context, callback) => { postHandler(newDeviceKeyHandler,event,context,callback) }
+module.exports.phone = (event, context, callback) => { postHandler(phoneHandler,event,context,callback) }
 
 const postHandler = (handler,event,context,callback) =>{
   if(!recaptchaMgr.isSecretsSet() ||
@@ -66,7 +69,7 @@ const doHandler = (handler,event,context,callback) =>{
       if(err.code) code=err.code;
       let message=err;
       if(err.message) message=err.message;
-      
+
       response = {
         statusCode: code,
         body: JSON.stringify({

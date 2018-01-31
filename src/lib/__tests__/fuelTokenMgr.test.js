@@ -1,9 +1,9 @@
+
 const FuelTokenMgr = require('../fuelTokenMgr');
 
 describe('FuelTokenMgr', () => {
-    
     let sut;
-    
+
     beforeAll(() => {
         sut = new FuelTokenMgr();
     });

@@ -18,7 +18,6 @@ plugins:
   - serverless-webpack
   - serverless-kms-secrets
 
-
 # Enable auto-packing of external modules
 custom:
   webpackIncludeModules: true
@@ -51,6 +50,13 @@ functions:
   newDeviceKey:
     handler: src/api_handler.newDeviceKey
     description: Get a new fuel token by sending a signed requestToken
+    events:
+     - http:
+         path: newDeviceKey
+         method: post
+  phone:
+    handler: src/api_handler.phone
+    description: Get a an attestiong for the verified phone on the fuelToken
     events:
      - http:
          path: newDeviceKey
