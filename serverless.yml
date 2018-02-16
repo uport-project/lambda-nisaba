@@ -56,10 +56,10 @@ functions:
          method: post
   phone:
     handler: src/api_handler.phone
-    description: Get a an attestiong for the verified phone on the fuelToken
+    description: Get a an attestation for the verified phone on the fuelToken
     events:
      - http:
-         path: newDeviceKey
+         path: phone
          method: post
 
 
