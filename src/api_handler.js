@@ -8,6 +8,7 @@ const FuncaptchaMgr = require('./lib/funcaptchaMgr');
 const AuthMgr = require('./lib/authMgr');
 const FuelTokenMgr = require('./lib/fuelTokenMgr');
 const UPortMgr = require('./lib/uPortMgr');
+const AttestationMgr = require('./lib/attestationMgr');
 
 const RecaptchaHandler = require('./handlers/recaptcha');
 const FuncaptchaHandler = require('./handlers/funcaptcha');
@@ -19,6 +20,7 @@ let funcaptchaMgr = new FuncaptchaMgr();
 let authMgr = new AuthMgr();
 let fuelTokenMgr = new FuelTokenMgr();
 let uPortMgr = new UPortMgr();
+let attestationMgr = new AttestationMgr();
 
 
 let recaptchaHandler = new RecaptchaHandler(recaptchaMgr,fuelTokenMgr);
