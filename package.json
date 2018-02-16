@@ -12,7 +12,16 @@
     "type": "git",
     "url": "git+https://github.com/uport-project/lambda-nisaba.git"
   },
-  "author": "Andres Junge <andres.junge@consensys.net>",
+  "contributors": [
+    {
+      "name": "Andres Junge",
+      "email": "andres.junge@consensys.net"
+    },
+    {
+      "name": "Cristobal Castillo",
+      "email": "cristobal.castillo@consensys.net"
+    }
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/uport-project/lambda-nisaba/issues"
@@ -33,5 +42,9 @@
     "webpack": "^3.6.0",
     "webpack-node-externals": "^1.6.0",
     "jsontokens": "^0.7.6"
+  },
+  "jest": {
+    "coverageDirectory": "./coverage/",
+    "collectCoverage": true
   }
 }
