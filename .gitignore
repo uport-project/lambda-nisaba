@@ -57,3 +57,10 @@ typings/
 # dotenv environment variables file
 .env
 
+#serverless
+.serverless
+
+curl_scripts/
+.webpack/
+
+.DS_Store
