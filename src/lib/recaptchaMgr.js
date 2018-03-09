@@ -1,19 +1,19 @@
-import rp  from 'request-promise';
+import rp from 'request-promise';
 
 class RecaptchaMgr {
-    
+
     constructor() {
-        this.recaptchaSecretKey=null;
+        this.recaptchaSecretKey = null;
     }
-    isSecretsSet(){
+    isSecretsSet() {
         return (this.recaptchaSecretKey !== null);
     }
 
-    setSecrets(secrets){
-        this.recaptchaSecretKey=secrets.RECAPTCHA_SECRET_KEY;
+    setSecrets(secrets) {
+        this.recaptchaSecretKey = secrets.RECAPTCHA_SECRET_KEY;
     }
 
-    async verifyToken(reCaptchaToken){
+    async verifyToken(reCaptchaToken) {
         //Verify token:
         let verificationUrl = "https://www.google.com/recaptcha/api/siteverify"
         let options = {
@@ -24,10 +24,10 @@ class RecaptchaMgr {
                 response: reCaptchaToken
             },
         }
-        let resp=await rp(options)
+        let resp = await rp(options)
         return JSON.parse(resp)
     }
 
-}    
+}
 
 module.exports = RecaptchaMgr;
