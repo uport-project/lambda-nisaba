@@ -1,9 +1,9 @@
 const RecaptchaMgr = require('../recaptchaMgr');
 
 describe('RecaptchaMgr', () => {
-    
+
     let sut;
-    
+
     beforeAll(() => {
         sut = new RecaptchaMgr();
     });

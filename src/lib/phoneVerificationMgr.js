@@ -196,4 +196,4 @@ class PhoneVerificationMgr {
 
 }
 
-module.exports = NexmoMgr;
+module.exports = PhoneVerificationMgr;
