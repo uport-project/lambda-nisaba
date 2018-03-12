@@ -55,12 +55,22 @@ functions:
          path: newDeviceKey
          method: post
   phone:
-    handler: src/api_handler.phone
+    handler: src/api_handler.phone_attestation
     description: Get a an attestation for the verified phone on the fuelToken
     events:
-     - http:
-         path: phone
-         method: post
+    - http:
+        path: phone
+        method: post
+  verify:
+    handler: src/api_handler.phone_verification
+    description: Verify a phone number using Nexmo verification
+    events:
+    - http:
+        path: verify
+        method: post
+    - http:
+        path: check
+        method: post
 
 
-  
+
