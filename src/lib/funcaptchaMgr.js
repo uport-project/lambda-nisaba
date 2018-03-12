@@ -24,7 +24,7 @@ class FuncaptchaMgr {
 
     let options = {
       method: 'GET',
-      uri: verificationUrl
+      uri   : verificationUrl
     }
     let resp = await rp(options)
     return JSON.parse(resp)

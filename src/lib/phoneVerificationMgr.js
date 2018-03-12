@@ -10,12 +10,13 @@ class PhoneVerificationMgr {
     }
 
     isSecretsSet() {
-        return (this.api_key !== null || this.api_secret !== null || this.pgUrl !== null);
+        return (this.api_key !== null || this.api_secret !== null || this.from !== null || this.pgUrl !== null);
     }
 
     setSecrets(secrets) {
         this.api_key = secrets.NEXMO_API_KEY;
         this.api_secret = secrets.NEXMO_SECRET;
+        this.from = secrets.NEXMO_FROM;
         this.client = new Nexmo({
             apiKey: this.api_key,
             apiSecret: this.api_secret
@@ -52,7 +53,7 @@ class PhoneVerificationMgr {
                 //Basically, an error
                 console.log("Nexmo error: ", resp.status, ". Phone: ", phoneNumber)
                 return ({
-                    error: resp.status,
+                    message: resp.status,
                     phone: phoneNumber
                 });
             }
@@ -91,7 +92,7 @@ class PhoneVerificationMgr {
                 console.log("nexmo.status:", resp.status, "error:", resp.error_text)
                 return ({
                     status: resp.status,
-                    error: resp.error_text
+                    message: resp.error_text
                 });
             } else {
                 return;
@@ -121,11 +122,11 @@ class PhoneVerificationMgr {
 
             if (resp.status == '0') {
                 this.deleteRequest(deviceKey)
-                return;
+                return ({data: resp.request_id}, null);
             } else {
-                return ({
+                return (null, {
                     status: resp.status,
-                    error: resp.error_text
+                    message: resp.error_text
                 })
             }
         })

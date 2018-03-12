@@ -15,7 +15,8 @@ const RecaptchaHandler = require('./handlers/recaptcha');
 const FuncaptchaHandler = require('./handlers/funcaptcha');
 const NewDeviceKeyHandler = require('./handlers/newDeviceKey');
 const PhoneAttestationHandler = require('./handlers/phone_attestation');
-const PhoneVerificationHandler = require('./handlers/phone_verification');
+const StartVerificationHandler = require('./handlers/start_verification');
+const CheckVerificationHandler = require('./handlers/check_verification');
 
 let recaptchaMgr = new RecaptchaMgr();
 let funcaptchaMgr = new FuncaptchaMgr();
@@ -28,15 +29,17 @@ let phoneVerificationMgr = new PhoneVerificationMgr();
 let recaptchaHandler = new RecaptchaHandler(recaptchaMgr,fuelTokenMgr);
 let funcaptchaHandler = new FuncaptchaHandler(funcaptchaMgr,fuelTokenMgr);
 let newDeviceKeyHandler = new NewDeviceKeyHandler(authMgr,uPortMgr,fuelTokenMgr);
-let phoneVerificationHandler = new PhoneVerificationHandler();
 let phoneAttestationHandler = new PhoneAttestationHandler(attestationMgr, fuelTokenMgr);
+let startVerificationHandler = new StartVerificationHandler(phoneVerificationMgr);
+let checkVerificationHandler = new CheckVerificationHandler(phoneVerificationMgr);
 
 
 module.exports.recaptcha = (event, context, callback) => { postHandler(recaptchaHandler,event,context,callback) }
 module.exports.funcaptcha = (event, context, callback) => { postHandler(funcaptchaHandler,event,context,callback) }
 module.exports.newDeviceKey = (event, context, callback) => { postHandler(newDeviceKeyHandler,event,context,callback) }
 module.exports.phone_attestation = (event, context, callback) => { postHandler(phoneAttestationHandler,event,context,callback) }
-module.exports.phone_verification = (event, context, callback) => { postHandler(phoneVerificationHandler, event, context, callback) }
+module.exports.start_verification = (event, context, callback) => { postHandler(startVerificationHandler, event, context, callback) }
+module.exports.check_verification = (event, context, callback) => { postHandler(checkVerificationHandler, event, context, callback) }
 
 const postHandler = (handler,event,context,callback) =>{
   if(!recaptchaMgr.isSecretsSet() ||

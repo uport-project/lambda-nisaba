@@ -62,12 +62,14 @@ functions:
         path: phone
         method: post
   verify:
-    handler: src/api_handler.phone_verification
+    handler: src/api_handler.start_verification
     description: Verify a phone number using Nexmo verification
     events:
     - http:
         path: verify
         method: post
+  check:
+    handler: src/api_handler.check_verification
     - http:
         path: check
         method: post
