@@ -61,13 +61,24 @@ functions:
     - http:
         path: phone
         method: post
-  verify:
+  start:
     handler: src/api_handler.start_verification
     description: Verify a phone number using Nexmo verification
     events:
     - http:
-        path: verify
+        path:  verify
         method: post
+  next:
+    handler: src/api_handler.continue_verification
+    description: Continue with the phone verification process
+    events:
+    - http:
+        path: next/{devicekey}
+        method: get
+        request:
+          parameters:
+            paths:
+              devicekey: true
   check:
     handler: src/api_handler.check_verification
     - http:

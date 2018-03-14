@@ -16,6 +16,7 @@ const FuncaptchaHandler = require('./handlers/funcaptcha');
 const NewDeviceKeyHandler = require('./handlers/newDeviceKey');
 const PhoneAttestationHandler = require('./handlers/phone_attestation');
 const StartVerificationHandler = require('./handlers/start_verification');
+const ContinueVerificationHandler = require('./handlers/continue_verification');
 const CheckVerificationHandler = require('./handlers/check_verification');
 
 let recaptchaMgr = new RecaptchaMgr();
@@ -31,6 +32,7 @@ let funcaptchaHandler = new FuncaptchaHandler(funcaptchaMgr,fuelTokenMgr);
 let newDeviceKeyHandler = new NewDeviceKeyHandler(authMgr,uPortMgr,fuelTokenMgr);
 let phoneAttestationHandler = new PhoneAttestationHandler(attestationMgr, fuelTokenMgr);
 let startVerificationHandler = new StartVerificationHandler(phoneVerificationMgr);
+let continueVerificationHandler = new ContinueVerificationHandler(phoneVerificationMgr);
 let checkVerificationHandler = new CheckVerificationHandler(phoneVerificationMgr);
 
 
@@ -39,6 +41,7 @@ module.exports.funcaptcha = (event, context, callback) => { postHandler(funcaptc
 module.exports.newDeviceKey = (event, context, callback) => { postHandler(newDeviceKeyHandler,event,context,callback) }
 module.exports.phone_attestation = (event, context, callback) => { postHandler(phoneAttestationHandler,event,context,callback) }
 module.exports.start_verification = (event, context, callback) => { postHandler(startVerificationHandler, event, context, callback) }
+module.exports.continue_verification = (event, context, callback) => { postHandler(continueVerificationHandler, event, context, callback) }
 module.exports.check_verification = (event, context, callback) => { postHandler(checkVerificationHandler, event, context, callback) }
 
 const postHandler = (handler,event,context,callback) =>{
