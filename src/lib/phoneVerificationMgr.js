@@ -4,9 +4,11 @@ import { Client } from 'pg'
 
 class PhoneVerificationMgr {
     constructor() {
-        this.pgUrl = null
-        this.client = null;
+        this.api_key = null;
+        this.api_secret = null;
+        this.pgUrl = null;
         this.from = null;
+        this.client = null;
     }
 
     isSecretsSet() {
@@ -17,6 +19,7 @@ class PhoneVerificationMgr {
         this.api_key = secrets.NEXMO_API_KEY;
         this.api_secret = secrets.NEXMO_SECRET;
         this.from = secrets.NEXMO_FROM;
+        this.pgUrl = secrets.PG_URL;
         this.client = new Nexmo({
             apiKey: this.api_key,
             apiSecret: this.api_secret
@@ -70,7 +73,7 @@ class PhoneVerificationMgr {
 
     async control(deviceKey, command) {
         if (!deviceKey) throw "no deviceKey";
-        if (!this.command) throw "no command";
+        if (!command) throw "no command";
         if (!this.client) throw "client is not initialized";
 
         let requestId;
@@ -87,6 +90,8 @@ class PhoneVerificationMgr {
                 console.error("error calling nexmo.verify.control", command, err)
                 throw "error on nexmo.verify.control";
             }
+
+            console.log("resp", resp)
 
             if (resp.status !== '0') {
                 console.log("nexmo.status:", resp.status, "error:", resp.error_text)
