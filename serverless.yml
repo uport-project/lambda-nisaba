@@ -81,6 +81,7 @@ functions:
               devicekey: true
   check:
     handler: src/api_handler.check_verification
+    events:
     - http:
         path: check
         method: post
