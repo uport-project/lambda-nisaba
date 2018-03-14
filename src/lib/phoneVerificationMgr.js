@@ -1,5 +1,5 @@
-import Nexmo from "nexmo";
-import { decodeToken, TokenVerifier } from "jsontokens";
+import Nexmo from 'nexmo'
+import { decodeToken, TokenVerifier } from 'jsontokens'
 import { Client } from 'pg'
 
 class PhoneVerificationMgr {
@@ -8,7 +8,7 @@ class PhoneVerificationMgr {
         this.api_secret = null;
         this.pgUrl = null;
         this.from = null;
-        this.client = null;
+        this.nexmo = null;
     }
 
     isSecretsSet() {
@@ -20,7 +20,7 @@ class PhoneVerificationMgr {
         this.api_secret = secrets.NEXMO_SECRET;
         this.from = secrets.NEXMO_FROM;
         this.pgUrl = secrets.PG_URL;
-        this.client = new Nexmo({
+        this.nexmo = new Nexmo({
             apiKey: this.api_key,
             apiSecret: this.api_secret
         }, {
@@ -32,7 +32,7 @@ class PhoneVerificationMgr {
     async start(deviceKey, phoneNumber) {
         if (!deviceKey) throw "no deviceKey";
         if (!phoneNumber) throw "no destination phoneNumber";
-        if (!this.client) throw "client is not initialized";
+        if (!this.nexmo) throw "client is not initialized";
 
         let params = {
             number: phoneNumber,
@@ -40,7 +40,7 @@ class PhoneVerificationMgr {
             code_length: 6
         };
 
-        this.client.verify.request(params, (err, resp) => {
+        this.nexmo.verify.request(params, (err, resp) => {
             if (err) {
                 console.log("error on nexmo.verify.request", err);
                 throw ("error calling nexmo.verify.request");
@@ -74,10 +74,10 @@ class PhoneVerificationMgr {
     async control(deviceKey, command) {
         if (!deviceKey) throw "no deviceKey";
         if (!command) throw "no command";
-        if (!this.client) throw "client is not initialized";
+        if (!this.nexmo) throw "client is not initialized";
 
         let requestId;
-        requestId = this.getRequest(deviceKey)
+        requestId = await this.getNexmoRequest(deviceKey)
         if (!requestId) throw "request_id not found"
 
         let params = {
@@ -85,7 +85,7 @@ class PhoneVerificationMgr {
             cmd: command
         }
 
-        this.client.verify.control(params, (err, resp) => {
+        this.nexmo.verify.control(params, (err, resp) => {
             if (err) {
                 console.error("error calling nexmo.verify.control", command, err)
                 throw "error on nexmo.verify.control";
@@ -108,10 +108,10 @@ class PhoneVerificationMgr {
     async check(deviceKey, code) {
         if (!deviceKey) throw "no deviceKey";
         if (!code) throw "no code";
-        if (!this.client) throw "client is not initialized";
+        if (!this.nexmo) throw "client is not initialized";
 
         let requestId;
-        requestId = this.getRequest(deviceKey)
+        requestId = await this.getNexmoRequest(deviceKey)
         if (!requestId) throw "request_id not found"
 
         let params = {
@@ -119,7 +119,7 @@ class PhoneVerificationMgr {
             code: code
         }
 
-        this.client.verify.check(params, (err, resp) => {
+        this.nexmo.verify.check(params, (err, resp) => {
             if (err) {
                 console.error("error calling nexmo.verify.check", err)
                 throw "error on nexmo.verify.check";
@@ -137,11 +137,9 @@ class PhoneVerificationMgr {
         })
     }
 
-    async createRequest(deviceKey, requestId, reqStatus) {
-        if (!this.pgUrl) throw ('no pgUrl set')
-        if (!this.deviceKey) throw ('no device key')
-        if (!this.requestId) throw ('no nexmo request id')
-        if (!this.reqStatus) throw ('no nexmo request status')
+    async getNexmoRequest(deviceKey){
+        if (!deviceKey) throw "no device key";
+        if (!this.pgUrl) throw "no pgUrl set";
 
         const client = new Client({
             connectionString: this.pgUrl,
@@ -149,28 +147,7 @@ class PhoneVerificationMgr {
 
         try {
             await client.connect()
-            let qry = "INSERT INTO nexmo_requests(device_key, request_id, request_status) VALUES($1, $2, $3);"
-            const res = await client.query(qry, [deviceKey, requestId, reqStatus]);
-            return;
-        } catch (e) {
-            throw (e);
-        } finally {
-            await client.end()
-        }
-    }
-
-    async getRequest(deviceKey) {
-        if (!this.pgUrl) throw ('no pgUrl set')
-        if (!this.deviceKey) throw ('no device key')
-
-        const client = new Client({
-            connectionString: this.pgUrl,
-        })
-
-        try {
-            await client.connect()
-            let qry = "SELECT request_id FROM nexmo_requests WHERE device_key=$1;"
-            const res = await client.query(qry, [deviceKey]);
+            const res = await client.query("SELECT request_id FROM nexmo_requests WHERE device_key=$1;", [deviceKey]);
             return res.rows[0].request_id;
         } catch (e) {
             throw (e);
@@ -179,23 +156,45 @@ class PhoneVerificationMgr {
         }
     }
 
-    async deleteRequest(deviceKey) {
+    async createRequest(deviceKey, requestId, reqStatus) {
+        if (!deviceKey) throw ('no device key')
+        if (!requestId) throw ('no nexmo request id')
+        if (!reqStatus) throw ('no nexmo request status')
         if (!this.pgUrl) throw ('no pgUrl set')
-        if (!this.deviceKey) throw ('no devicekey')
 
-        const client = new Client({
+        const pgClient = new Client({
             connectionString: this.pgUrl,
         })
 
         try {
-            await client.connect()
-            let qry = "DELETE FROM nexmo_requests WHERE device_key = $1;"
-            const res = await client.query(qry, [deviceKey]);
+            await pgClient.connect()
+            let qry = "INSERT INTO nexmo_requests(device_key, request_id, request_status) VALUES($1, $2, $3);"
+            const res = await pgClient.query(qry, [deviceKey, requestId, reqStatus]);
             return;
         } catch (e) {
             throw (e);
         } finally {
-            await client.end()
+            await pgClient.end()
+        }
+    }
+
+    async deleteRequest(deviceKey) {
+        if (!deviceKey) throw ('no device key')
+        if (!this.pgUrl) throw ('no pgUrl set')
+
+        const pgClient = new Client({
+            connectionString: this.pgUrl,
+        })
+
+        try {
+            await pgClient.connect()
+            let qry = "DELETE FROM nexmo_requests WHERE device_key = $1;"
+            const res = await pgClient.query(qry, [deviceKey]);
+            return;
+        } catch (e) {
+            throw (e);
+        } finally {
+            await pgClient.end()
         }
     }
 

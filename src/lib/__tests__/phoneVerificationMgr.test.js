@@ -1,10 +1,29 @@
+jest.mock("pg");
+import {
+    Client
+} from "pg";
+let pgClientMock = {
+    connect: jest.fn(),
+    query: jest.fn(() => {
+        return Promise.resolve({
+            rows: [{
+                request_id: "1234"
+            }]
+        })
+    }),
+    end: jest.fn()
+};
+Client.mockImplementation(() => {
+    return pgClientMock;
+});
+
 const PhoneVerificationMgr = require('../phoneVerificationMgr');
 
 describe('PhoneVerificationMgr', () => {
 
     let sut;
-    let phoneNumber;
-    let deviceKey;
+    let phoneNumber = "+56988425841"
+    let deviceKey = '0x123456';
     let code;
     let nexmoClientMock = {
         verify: jest.fn()
@@ -15,8 +34,6 @@ describe('PhoneVerificationMgr', () => {
 
     beforeAll(() => {
         sut = new PhoneVerificationMgr();
-        phoneNumber = "+56988425841"
-        deviceKey = '0x123456';
     });
 
     test('empty constructor', () => {
@@ -48,9 +65,9 @@ describe('PhoneVerificationMgr', () => {
             NEXMO_FROM: "0000",
             PG_URL: "fakeurl"
         })
-        sut.client = nexmoClientMock;
+        sut.nexmo = nexmoClientMock;
         expect(sut.isSecretsSet()).toEqual(true);
-        expect(sut.client).not.toBeUndefined()
+        expect(sut.nexmo).not.toBeUndefined()
     });
 
     test('start() no deviceKey', (done) => {
@@ -128,10 +145,6 @@ describe('PhoneVerificationMgr', () => {
                 status: '0'
             }
         });
-        sut.getRequest = jest.fn();
-        sut.getRequest.mockImplementation(() => {
-            return "1234"
-        });
         sut.control(deviceKey, cmd)
             .then((err) => {
                 expect(nexmoClientMock.verify.control).toBeCalled();
@@ -181,5 +194,116 @@ describe('PhoneVerificationMgr', () => {
                 done();
             })
     });
+
+    test('getNexmoRequest() no deviceKey', (done) => {
+
+        sut.getNexmoRequest(null)
+            .then((resp) => {
+                fail("shouldn't return");
+                done()
+            })
+            .catch((err) => {
+                expect(err).toEqual('no device key')
+                done()
+            })
+    });
+
+    test('createRequest() no deviceKey', (done) => {
+        sut.createRequest(null)
+            .then((resp) => {
+                fail("shouldn't return");
+                done()
+            })
+            .catch((err) => {
+                expect(err).toEqual('no device key')
+                done()
+            })
+    });
+
+    test('createRequest() no requestId', (done) => {
+        sut.createRequest(deviceKey)
+            .then((resp) => {
+                fail("shouldn't return");
+                done()
+            })
+            .catch((err) => {
+                expect(err).toEqual('no nexmo request id')
+                done()
+            })
+    });
+
+    test('createRequest() no reqStatus', (done) => {
+        sut.createRequest(deviceKey, 1234)
+            .then((resp) => {
+                fail("shouldn't return");
+                done()
+            })
+            .catch((err) => {
+                expect(err).toEqual('no nexmo request status')
+                done()
+            })
+    });
+
+    test("createRequest() happy path", done => {
+
+        pgClientMock.connect = jest.fn();
+        pgClientMock.connect.mockClear();
+        pgClientMock.end.mockClear();
+        pgClientMock.query.mockClear();
+        pgClientMock.query = jest.fn(() => {
+            return Promise.resolve({ rows: ["ok"] });
+        });
+
+        sut.createRequest(deviceKey, 1234, "0")
+            .then(resp => {
+                expect(pgClientMock.connect).toBeCalled();
+                expect(pgClientMock.query).toBeCalled();
+                expect(pgClientMock.query).toBeCalledWith(
+                    "INSERT INTO nexmo_requests(device_key, request_id, request_status) VALUES($1, $2, $3);", [deviceKey, 1234, "0"]);
+                expect(pgClientMock.end).toBeCalled();
+                done();
+            })
+            .catch(err => {
+                fail(err);
+                done();
+            });
+    });
+
+    test('deleteRequest() no deviceKey', (done) => {
+        sut.deleteRequest()
+            .then((resp) => {
+                fail("shouldn't return");
+                done()
+            })
+            .catch((err) => {
+                expect(err).toEqual('no device key')
+                done()
+            })
+    });
+
+    test("deleteRequest() happy path", done => {
+        pgClientMock.connect = jest.fn();
+        pgClientMock.connect.mockClear();
+        pgClientMock.end.mockClear();
+        pgClientMock.query.mockClear();
+        pgClientMock.query = jest.fn(() => {
+            return Promise.resolve({ rows: ["ok"] });
+        });
+
+        sut.deleteRequest(deviceKey, 1234, "0")
+            .then(resp => {
+                expect(pgClientMock.connect).toBeCalled();
+                expect(pgClientMock.query).toBeCalled();
+                expect(pgClientMock.query).toBeCalledWith(
+                    "DELETE FROM nexmo_requests WHERE device_key = $1;", [deviceKey]);
+                expect(pgClientMock.end).toBeCalled();
+                done();
+            })
+            .catch(err => {
+                fail(err);
+                done();
+            });
+    });
+
 
 });

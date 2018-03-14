@@ -42,7 +42,7 @@
     "uport": "^0.6.0",
     "webpack": "^3.6.0",
     "webpack-node-externals": "^1.6.0",
-    "pg": "^7.4.1",
+    "pg": "^7.4.0",
     "nexmo": "^2.2.0"
   },
   "jest": {
