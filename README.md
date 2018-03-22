@@ -1,5 +1,13 @@
 # lambda-nisaba
+_(Sumerian) Nisaba was the Sumerian goddess of writing, learning, and the harvest_
+
 Lambda functions for verifying phone numbers
+
+[![CircleCI](https://circleci.com/gh/uport-project/lambda-nisaba.svg?style=svg&circle-token=7a1d2d55db40176cd8f6122462dff9f856824702)](https://circleci.com/gh/uport-project/lambda-nisaba)
+
+[![codecov](https://codecov.io/gh/uport-project/lambda-nisaba/branch/master/graph/badge.svg?token=r3Sqd1agEV)](https://codecov.io/gh/uport-project/lambda-nisaba)
+
+
 
 ![Nisaba](https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/VAM_Nisaba_Lagasch.jpg/220px-VAM_Nisaba_Lagasch.jpg "Nisaba")
 

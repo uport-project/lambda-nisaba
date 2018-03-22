@@ -1,15 +1,13 @@
-const RecaptchaMgr = require('../recaptchaMgr');
+const RecaptchaMgr = require("../recaptchaMgr");
 
-describe('RecaptchaMgr', () => {
+describe("RecaptchaMgr", () => {
+  let sut;
 
-    let sut;
+  beforeAll(() => {
+    sut = new RecaptchaMgr();
+  });
 
-    beforeAll(() => {
-        sut = new RecaptchaMgr();
-    });
-
-    test('empty constructor', () => {
-        expect(sut).not.toBeUndefined();
-    });
-
+  test("empty constructor", () => {
+    expect(sut).not.toBeUndefined();
+  });
 });

@@ -50,7 +50,7 @@ class CheckVerificationHandler {
             message: err.message
           };
         }
-        cb(null, { data: res.data });
+        cb(null, { data: resp.data });
       });
     } catch (err) {
       cb({
