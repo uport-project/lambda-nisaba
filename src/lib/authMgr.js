@@ -10,7 +10,6 @@ class AuthMgr {
   }
 
   setSecrets(secrets) {
-    //this.nisabaPub=secrets.NISABA_PUBKEY;
     this.nisabaPub = secrets.FUEL_TOKEN_PUBLIC_KEY;
   }
 
