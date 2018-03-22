@@ -64,3 +64,6 @@ curl_scripts/
 .webpack/
 
 .DS_Store
+
+# linter
+.eslintrc.json
