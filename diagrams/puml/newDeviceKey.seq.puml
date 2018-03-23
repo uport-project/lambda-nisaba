@@ -1,0 +1,27 @@
+@startuml
+participant "uPort Mobile App" as uPort
+participant "uPort::nisaba" as nisaba
+
+uPort -> nisaba: Request Fuel Token for New Device Key\nPOST /newDeviceKey
+note left of nisaba #FFAAAA
+Authorization: Bearer <jwt token>
+end note
+note left of nisaba #FFAAAA
+{
+  requestToken: <jwt signed by deviceKey>
+}
+end note
+activate nisaba
+nisaba -> nisaba: Issue fueltoken for newDeviceKey
+nisaba -> uPort: Return fuel token
+note left of nisaba #FFAAAA
+{
+  status: "success",
+  data: <fuel token for newDeviceKey>
+}
+end note
+deactivate nisaba
+
+
+
+@enduml

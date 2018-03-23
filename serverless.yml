@@ -1,0 +1,90 @@
+service: lambda-nisaba
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  stage: develop
+  region: us-west-2
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+      - KMS:Decrypt
+      Resource: ${self:custom.kmsSecrets.keyArn}
+  environment:
+      SECRETS: ${self:custom.kmsSecrets.secrets.SECRETS}
+
+# Use the serverless-webpack plugin to transpile ES6
+plugins:
+  - serverless-webpack
+  - serverless-kms-secrets
+
+# Enable auto-packing of external modules
+custom:
+  webpackIncludeModules: true
+  serverless-kms-secrets:
+    secretsFile: kms-secrets.${opt:stage, self:provider.stage}.${opt:region, self:provider.region}.yml
+  kmsSecrets: ${file(kms-secrets.${opt:stage, self:provider.stage}.${opt:region, self:provider.region}.yml)}
+
+# Implemented lambda funcionts
+functions:
+  recaptcha:
+    handler: src/api_handler.recaptcha
+    description: Validate Recaptcha Code
+    events:
+     - http:
+         path: v3/recaptcha #Legacy
+         method: post
+     - http:
+         path: recaptcha
+         method: post
+  funcaptcha:
+    handler: src/api_handler.funcaptcha
+    description: Validate Funcaptcha Code
+    events:
+     - http:
+         path: v3/funcaptcha #Legacy
+         method: post
+     - http:
+         path: funcaptcha
+         method: post
+  newDeviceKey:
+    handler: src/api_handler.newDeviceKey
+    description: Get a new fuel token by sending a signed requestToken
+    events:
+     - http:
+         path: newDeviceKey
+         method: post
+  phone:
+    handler: src/api_handler.phone_attestation
+    description: Get a an attestation for the verified phone on the fuelToken
+    events:
+    - http:
+        path: phone
+        method: post
+  start:
+    handler: src/api_handler.start_verification
+    description: Verify a phone number using Nexmo verification
+    events:
+    - http:
+        path:  verify
+        method: post
+  next:
+    handler: src/api_handler.continue_verification
+    description: Continue with the phone verification process
+    events:
+    - http:
+        path: next/{devicekey}
+        method: get
+        request:
+          parameters:
+            paths:
+              devicekey: true
+  check:
+    handler: src/api_handler.check_verification
+    events:
+    - http:
+        path: check
+        method: post
+
+
+
