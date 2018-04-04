@@ -22,7 +22,7 @@ class PhoneVerificationMgr {
 
   setSecrets(secrets) {
     this.api_key = secrets.NEXMO_API_KEY;
-    this.api_secret = secrets.NEXMO_SECRET;
+    this.api_secret = secrets.NEXMO_API_SECRET;
     this.from = secrets.NEXMO_FROM;
     this.pgUrl = secrets.PG_URL;
     this.nexmo = new Nexmo(

@@ -61,7 +61,7 @@ describe("PhoneVerificationMgr", () => {
     expect(sut.isSecretsSet()).toEqual(false);
     sut.setSecrets({
       NEXMO_API_KEY: "fakekey",
-      NEXMO_SECRET: "fakesecret",
+      NEXMO_API_SECRET: "fakesecret",
       NEXMO_FROM: "0000",
       PG_URL: "fakeurl"
     });
