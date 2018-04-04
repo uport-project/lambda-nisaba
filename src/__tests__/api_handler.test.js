@@ -13,7 +13,7 @@ describe("apiHandler", () => {
         Plaintext: JSON.stringify({
           FUEL_TOKEN_PRIVATE_KEY: "fakeprivatekey",
           NEXMO_API_KEY: "fakenexmokey",
-          NEXMO_SECRET: "fakenexmosecret"
+          NEXMO_API_SECRET: "fakenexmosecret"
         })
       })
     );
