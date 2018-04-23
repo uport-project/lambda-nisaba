@@ -31,6 +31,7 @@
     "aws-sdk-mock": "^1.7.0",
     "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.6.0",
+    "did-jwt": "0.0.8",
     "jest": "^21.2.0",
     "uport": "^0.6.0"
   },
