@@ -1,4 +1,4 @@
-import sha3 from "js-sha3";
+import { toEthereumAddress } from 'did-jwt/lib/Digest'
 
 class NewDeviceKeyHandler {
   constructor(authMgr, uPortMgr, fuelTokenMgr) {
@@ -68,10 +68,8 @@ class NewDeviceKeyHandler {
     }
     console.log(dRequestToken);
 
-    const pubKey = dRequestToken.profile.publicKey;
-    const address = sha3
-      .keccak_256(new Buffer(pubKey.slice(4), "hex"))
-      .slice(-40);
+    const pubKey = dRequestToken.doc.publicKey.find(pub => pub.type === 'Secp256k1VerificationKey2018');
+    const address = pubKey.ethereumAddress || toEthereumAddress(pubKey.publicKeyHex);
     console.log("REQ TOKEN ADDR  : " + "0x" + address);
 
     console.log("FUEL TOKEN ADDR : " + authToken.sub);
