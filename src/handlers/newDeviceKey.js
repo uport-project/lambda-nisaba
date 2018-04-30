@@ -1,4 +1,4 @@
-import { toEthereumAddress } from 'did-jwt/lib/Digest'
+import { toEthereumAddress } from "did-jwt/lib/Digest";
 
 class NewDeviceKeyHandler {
   constructor(authMgr, uPortMgr, fuelTokenMgr) {
@@ -68,14 +68,17 @@ class NewDeviceKeyHandler {
     }
     console.log(dRequestToken);
 
-    const pubKey = dRequestToken.doc.publicKey.find(pub => pub.type === 'Secp256k1VerificationKey2018');
-    const address = pubKey.ethereumAddress || toEthereumAddress(pubKey.publicKeyHex);
-    console.log("REQ TOKEN ADDR  : " + "0x" + address);
+    const pubKey = dRequestToken.doc.publicKey.find(
+      pub => pub.type === "Secp256k1VerificationKey2018"
+    );
+    const address =
+      pubKey.ethereumAddress || toEthereumAddress(pubKey.publicKeyHex);
 
-    console.log("FUEL TOKEN ADDR : " + authToken.sub);
+    console.log("REQ TOKEN ADDR  : ", address);
+    console.log("FUEL TOKEN ADDR : ", authToken.sub);
 
     //Check if address on fuelToken (authToken) is the same as the one on the requesToken
-    if ("0x" + address != authToken.sub) {
+    if (address != authToken.sub) {
       console.log("authToken.sub !== decodedRequestToken..address");
       cb({
         code: 403,
