@@ -1,7 +1,7 @@
 {
   "name": "lambda-nisaba",
-  "version": "1.1.1",
-  "description": "uPort Phone verification service",
+  "version": "1.2.0",
+  "description": "uPort anti-sybil & fuel token generator service",
   "main": "index.js",
   "scripts": {
     "test": "jest --verbose --runInBand",
@@ -20,6 +20,10 @@
     {
       "name": "Cristobal Castillo",
       "email": "cristobal.castillo@consensys.net"
+    },
+    {
+      "name": "Pelle Braendgaard",
+      "email": "pelle.braendgaard@consensys.net"
     }
   ],
   "license": "MIT",
@@ -31,20 +35,22 @@
     "aws-sdk-mock": "^1.7.0",
     "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.6.0",
-    "jest": "^21.2.0",
-    "uport": "^0.6.0"
+    "did-jwt": "^0.0.8",
+    "jest": "^21.2.0"
   },
   "dependencies": {
+    "ethr-did-resolver": "^0.0.8",
     "jsontokens": "^0.7.6",
+    "nexmo": "^2.2.0",
+    "pg": "^7.4.0",
     "request": "^2.83.0",
     "request-promise": "^4.2.2",
     "serverless-kms-secrets": "^1.0.2",
     "serverless-webpack": "^3.1.0",
-    "uport": "^0.6.0",
+    "uport": "^0.7.0-alpha-2",
+    "uport-did-resolver": "^0.0.2",
     "webpack": "^3.6.0",
-    "webpack-node-externals": "^1.6.0",
-    "pg": "^7.4.0",
-    "nexmo": "^2.2.0"
+    "webpack-node-externals": "^1.6.0"
   },
   "jest": {
     "coverageDirectory": "./coverage/",
