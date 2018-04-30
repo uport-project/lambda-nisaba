@@ -1,0 +1,43 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`UportMgr verifyToken() happy path 1`] = `
+Object {
+  "doc": Object {
+    "@context": "https://w3id.org/did/v1",
+    "id": "did:uport:2ozsFQWAU7CpHZLqu2wSYbJFWzDNB26aoCF",
+    "publicKey": Array [
+      Object {
+        "id": "did:uport:2ozsFQWAU7CpHZLqu2wSYbJFWzDNB26aoCF#keys-1",
+        "owner": "did:uport:2ozsFQWAU7CpHZLqu2wSYbJFWzDNB26aoCF",
+        "publicKeyHex": "04cb5088ccc18224d512c51f05c35a17e7cf7e44824d18e04cc57dca40dfad771587714a21da6c99f97808cf590d3411bede033d093419ee5ad1b6a8b9c5408b08",
+        "type": "EcdsaPublicKeySecp256k1",
+      },
+      Object {
+        "id": "did:uport:2ozsFQWAU7CpHZLqu2wSYbJFWzDNB26aoCF#keys-2",
+        "owner": "did:uport:2ozsFQWAU7CpHZLqu2wSYbJFWzDNB26aoCF",
+        "publicKeyBase64": "m3sJ8uRQ7+LQaM67zp19gTQaAFX35fvYAvbYWnHAcTc=",
+        "type": "Curve25519EncryptionPublicKey",
+      },
+    ],
+  },
+  "issuer": "did:uport:2ozsFQWAU7CpHZLqu2wSYbJFWzDNB26aoCF",
+  "jwt": "eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJpc3MiOiIyb3pzRlFXQVU3Q3BIWkxxdTJ3U1liSkZXekROQjI2YW9DRiIsImlhdCI6MTUxMzM1MjgzNCwiZXZlbnQiOnsidHlwZSI6IlNUT1JFX0NPTk5FQ1RJT04iLCJhZGRyZXNzIjoiMm96c0ZRV0FVN0NwSFpMcXUyd1NZYkpGV3pETkIyNmFvQ0YiLCJjb25uZWN0aW9uVHlwZSI6ImNvbnRyYWN0cyIsImNvbm5lY3Rpb24iOiIweDJjYzMxOTEyYjJiMGYzMDc1YTg3YjM2NDA5MjNkNDVhMjZjZWYzZWUifSwiZXhwIjoxNTEzNDM5MjM0fQ.tqX5eEuaTEyYPUSgatK5zEsj_WpE-dIEHDc4ItpOvAZuBkSyV9_zbb0puNtDrZTVA7MlZ43FSSpf9CGIUxup-w",
+  "payload": Object {
+    "event": Object {
+      "address": "2ozsFQWAU7CpHZLqu2wSYbJFWzDNB26aoCF",
+      "connection": "0x2cc31912b2b0f3075a87b3640923d45a26cef3ee",
+      "connectionType": "contracts",
+      "type": "STORE_CONNECTION",
+    },
+    "exp": 1513439234,
+    "iat": 1513352834,
+    "iss": "2ozsFQWAU7CpHZLqu2wSYbJFWzDNB26aoCF",
+  },
+  "signer": Object {
+    "id": "did:uport:2ozsFQWAU7CpHZLqu2wSYbJFWzDNB26aoCF#keys-1",
+    "owner": "did:uport:2ozsFQWAU7CpHZLqu2wSYbJFWzDNB26aoCF",
+    "publicKeyHex": "04cb5088ccc18224d512c51f05c35a17e7cf7e44824d18e04cc57dca40dfad771587714a21da6c99f97808cf590d3411bede033d093419ee5ad1b6a8b9c5408b08",
+    "type": "EcdsaPublicKeySecp256k1",
+  },
+}
+`;

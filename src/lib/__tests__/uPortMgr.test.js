@@ -15,29 +15,14 @@ describe("UportMgr", () => {
     expect(sut).not.toBeUndefined();
   });
 
-  test("verifyToken() no token", done => {
-    sut
-      .verifyToken(null)
-      .then(resp => {
-        fail("shouldn't return");
-        done();
-      })
-      .catch(err => {
-        expect(err).toEqual("no token");
-        done();
-      });
+  test("verifyToken() no token", () => {
+    return expect(sut.verifyToken(null)).rejects.toEqual("no token")
   });
 
-  test("verifyToken() happy path", done => {
+  test("verifyToken() happy path", () => {
     const DATE_TO_USE = new Date("2017-12-15T22:41:20");
     Date.now = jest.genMockFunction().mockReturnValue(DATE_TO_USE);
 
-    sut.verifyToken(eventToken).then(resp => {
-      expect(resp.jwt).toEqual(eventToken);
-      expect(resp.payload.event.address).toEqual(
-        "2ozsFQWAU7CpHZLqu2wSYbJFWzDNB26aoCF"
-      );
-      done();
-    });
+    return expect(sut.verifyToken(eventToken)).resolves.toMatchSnapshot();
   });
 });
