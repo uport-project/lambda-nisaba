@@ -1,7 +1,7 @@
 {
   "name": "lambda-nisaba",
-  "version": "1.1.1",
-  "description": "uPort Phone verification service",
+  "version": "1.2.0",
+  "description": "uPort anti-sybil & fuel token generator service",
   "main": "index.js",
   "scripts": {
     "test": "jest --verbose --runInBand",
@@ -20,6 +20,10 @@
     {
       "name": "Cristobal Castillo",
       "email": "cristobal.castillo@consensys.net"
+    },
+    {
+      "name": "Pelle Braendgaard",
+      "email": "pelle.braendgaard@consensys.net"
     }
   ],
   "license": "MIT",
