@@ -1,5 +1,4 @@
-import { decodeToken } from "jsontokens";
-import { createJWT, verifyJWT, SimpleSigner } from "did-jwt";
+import { createJWT, verifyJWT, SimpleSigner, decodeJWT } from "did-jwt";
 
 class FuelTokenMgr {
   constructor() {
@@ -51,7 +50,7 @@ class FuelTokenMgr {
   }
 
   async decode(fuelToken) {
-    return decodeToken(fuelToken);
+    return decodeJWT(fuelToken);
   }
 }
 
