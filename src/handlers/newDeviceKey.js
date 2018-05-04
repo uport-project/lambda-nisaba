@@ -69,7 +69,7 @@ class NewDeviceKeyHandler {
     console.log(dRequestToken);
 
     const pubKey = dRequestToken.doc.publicKey.find(
-      pub => pub.type === "Secp256k1VerificationKey2018"
+      pub => pub.type === "EcdsaPublicKeySecp256k1"
     );
     const address =
       pubKey.ethereumAddress || toEthereumAddress(pubKey.publicKeyHex);
