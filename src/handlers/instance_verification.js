@@ -1,4 +1,4 @@
-class RecaptchaHandler {
+class InstanceVerificationHandler {
     constructor(instanceMgr, fuelTokenMgr) {
       this.instanceMgr = instanceMgr;
       this.fuelTokenMgr = fuelTokenMgr;
@@ -46,22 +46,12 @@ class RecaptchaHandler {
       }
   
       try {
-        //Verify instanceId token
+        //Verify instanceId token exists and get details
         let iid_resp = await this.instanceMgr.getInstanceTokenDetails(
             body.iid_token
         );
 
         let check = await this.instanceMgr.checkInstanceDetails(iid_resp)
-  
-        // if (!check === true) {
-        //   console.error(iid_resp);
-        //   let message =
-        //     "error verifying token: " + verificationResp["error-codes"];
-        //   throw {
-        //     code: 400,
-        //     message: message
-        //   };
-        // }
   
         //Get fuel token
         let fuelToken = await this.fuelTokenMgr.newToken(body.deviceAddress);
@@ -73,5 +63,5 @@ class RecaptchaHandler {
     }
   }
   
-  module.exports = RecaptchaHandler;
+  module.exports = InstanceVerificationHandler;
   
