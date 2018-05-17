@@ -1,4 +1,5 @@
-import rp from "request-promise";
+import rp from "request-promise"
+import resolve from 'did-resolver'
 
 class InstanceVerificationMgr {
     constructor() {
@@ -18,8 +19,7 @@ class InstanceVerificationMgr {
           )
     }
 
-
-    //an example token detail is this:
+    //an example token detail:
     // {
     //     "applicationVersion": "1",
     //     "connectDate": "2018-04-20",
@@ -45,19 +45,15 @@ class InstanceVerificationMgr {
         }
 
         let resp = await rp(iid_options);
-        return JSON.parse(resp);
+        return resp;
     }
 
     async checkInstanceDetails(iid_resp) {
-
-        if (iid_resp.authorizedEntity !== this.google_project_id) {
+        if (iid_resp.authorizedEntity !== this.google_project_id.toString()) {
             throw "token is generated for a different entity. Only uPort SDK instance tokens accepted."
         }
-
         var dAppMnid = iid_resp.scope // to be used for rate limiting
-
-        var dAppDDO = getDappDetails(dAppMnid)
-
+        var dAppDDO = this.getDappDetails(dAppMnid)
         // ANDROID or IOS
         var platform = iid_resp.platform
 
@@ -68,32 +64,51 @@ class InstanceVerificationMgr {
         //this is the fingerprint of the android signature.
         // this field should be checked against the list of fingerprints from the dApp doc from IPFS
         var appFingerprint = iid_resp.appSigner
-        
-        //TODO: after appmanager fields are added, make the actual checks here
 
+        //TODO: after appmanager fields are added, uncomment the actual checks
+        // if (platform.toLowercase() === "android") {
+        //     if (dAppDDO.appId !== appId) {
+        //         throw "the dApp is not registered for fueling"
+        //     }
+        //     if (dAppDDO.fingerprints.indexOf(appFingerprint) == -1) {
+        //         throw "the dApp signature fingerprint does not match"
+        //     }
+        // } else if (platform.toLowercase() === "ios") {
+        //     if (dAppDDO.bundleId !== appId) {
+        //         throw "the dApp is not registered for fueling"
+        //     }
+        // }
+        
         return true
     }
 
     async getDappDetails(dAppMnid) {
-        //TODO: obtain the dApp details from ipfs
+        var ddo = await resolve(`did:uport:${dAppMnid}`)
+        //TODO: extract relevant fields from did doc
+        //TODO: convert fingerprints to simple form (lowercase, without the colons)
+    }
 
 /**
- * example dApp details:
+ * example dApp DDO, what's needed is `bundleId` for iOS and `appId` and `fingerprints` for android:
  * 
- *   {
- *       publicKey : "0x04b235d4d3247b178f1d03cb02543af7cdbc7862a2e644dbd2400d3c909b932a692b8ee00d1505f22ebb7e30d883d3f3052bf88799e59f051b0cc1e7bcd238075c",
- *       appId : "com.uportMobile.iid.test",
- *       bundleId : "me.uport.iid.test",
- *       fingerprints : [
- *            // fingerprint can heve 2 forms
- *           "81bca393436fb4d743af862779ce7aaaf94696e2",
- *           "81:BC:A3:93:43:6F:B4:D7:43:AF:86:27:79:CE:7A:AA:F9:46:96:E2"
- *       ]
- *   }
+ * {
+ *      '@context': 'https://w3id...',
+ *      id: 'did:uport:2p1yWK...',
+ *      uPortProfile: {
+ *          ...
+ * 
+ *          appId : "com.uportMobile.iid.test",
+ *          bundleId : "me.uport.iid.test",
+ *          fingerprints : [
+ *               // fingerprint can heve 2 forms
+ *              "81bca393436fb4d743af862779ce7aaaf94696e2",
+ *              "81:BC:A3:93:43:6F:B4:D7:43:AF:86:27:79:CE:7A:AA:F9:46:96:E2"
+ *          ]
+ * 
+ *      }
  * 
  */
-    }
-}
 
+}
 
 module.exports = InstanceVerificationMgr;
