@@ -17,8 +17,6 @@ provider:
 plugins:
   - serverless-webpack
   - serverless-kms-secrets
-
-# Enable auto-packing of external modules
 custom:
   webpackIncludeModules: true
   serverless-kms-secrets:
@@ -84,6 +82,12 @@ functions:
     events:
     - http:
         path: check
+        method: post
+  instanceFuel:
+    handler: src/api_handler.instance_fuel
+    events:
+    - http:
+        path: instance_fuel
         method: post
 
 
