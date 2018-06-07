@@ -1,3 +1,22 @@
+/*
+file - funCaptcha.js
+
+Function:
+1. Verify funCaptchaToken
+2. If funCaptchaToken verified, then get new fuel token
+3. send callback function with fueltoken back
+
+inputs
+- funcaptchaMgr: interactive captcha service (JWT token generation)
+- fuelTokenMgr: develops new JWT tokens for new users
+
+resources
+- N/A
+
+resource description
+- N/A
+*/
+
 class FuncaptchaHandler {
   constructor(funCaptchaMgr, fuelTokenMgr) {
     this.funCaptchaMgr = funCaptchaMgr;

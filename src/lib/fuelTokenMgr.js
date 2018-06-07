@@ -1,3 +1,19 @@
+/*
+file - fuelTokenMgr.js - this file manager sets signing secrets from the
+funding account and develops new JWT tokens for new users that can be passaed
+to sensui (and also check and verified)
+
+THIS FILE MUST BE CHANGED TO FIT YOUR FORKED API GIVEN THAT UPORT USES
+THEIR SPECIFIC API ENDPOINTS
+
+resources
+- did-jwt: https://github.com/uport-project/did-jwt
+
+resource description
+- did-jwt: The did-JWT library allows you to sign and verify
+JSON Web Tokens (JWT). Public keys are resolved using the
+Decentralized ID (DID) of the iss claim of the JWT.
+*/
 import { createJWT, verifyJWT, SimpleSigner, decodeJWT } from "did-jwt";
 
 class FuelTokenMgr {

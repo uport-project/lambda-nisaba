@@ -1,3 +1,11 @@
+/*
+file - recaptchaMgr.js - setting and verify the captcha token being submited
+
+resource - https://developers.google.com/recaptcha/intro
+
+resource description -  A user authentication API that leverages captchas to
+protect your service against spam and other types of automated abuse
+*/
 import rp from "request-promise";
 
 class RecaptchaMgr {
@@ -9,6 +17,7 @@ class RecaptchaMgr {
   }
 
   setSecrets(secrets) {
+    //setting the secret environmental variable to RECAPTCHA_SECRET_KEY
     this.recaptchaSecretKey = secrets.RECAPTCHA_SECRET_KEY;
   }
 

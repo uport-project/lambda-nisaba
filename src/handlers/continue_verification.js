@@ -1,3 +1,18 @@
+/*
+file - continue_verification.js
+
+Function:
+1. continues verification started in start_verification
+
+inputs
+- phoneVerificationMgr: Verify phone number code sent via text
+
+resources
+- N/A
+
+resource description
+- N/A
+*/
 class ContinueVerificationHandler {
   constructor(phoneVerificationMgr) {
     this.phoneVerificationMgr = phoneVerificationMgr;

@@ -1,3 +1,22 @@
+/*
+file - newDeviceKey.js
+
+Function:
+1. Verify Request Token (based on uport standards)
+2. Check if address on fuelToken (authToken) is the same as the one on the requestToken
+3. If yes, Issue new fuelToken
+
+inputs
+- authMgr: verifies authorization request to nisaba service
+- uPortMgr: uport specific JWT token verification
+- fuelTokenMgr: develops new JWT tokens for new users
+
+resources
+- N/A
+
+resource description
+- N/A
+*/
 import { toEthereumAddress } from "did-jwt/lib/Digest";
 
 class NewDeviceKeyHandler {
@@ -78,7 +97,7 @@ class NewDeviceKeyHandler {
     console.log("REQ TOKEN ADDR  : ", address);
     console.log("FUEL TOKEN ADDR : ", authToken.sub);
 
-    //Check if address on fuelToken (authToken) is the same as the one on the requesToken
+    //Check if address on fuelToken (authToken) is the same as the one on the requestToken
     if (address != authToken.sub) {
       console.log("authToken.sub !== decodedRequestToken..address");
       cb({

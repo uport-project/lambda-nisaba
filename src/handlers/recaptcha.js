@@ -1,3 +1,21 @@
+/*
+file - recaptcha.js
+
+Function:
+1. Verify reCaptchaToken
+2. If reCaptchaToken verified, then get new fuel token
+3. send callback function with fueltoken back 
+
+inputs
+- recaptchaMgr: setting and verify the captcha token
+- fuelTokenMgr: develops new JWT tokens for new users
+
+resources
+- N/A
+
+resource description
+- N/A
+*/
 class RecaptchaHandler {
   constructor(recaptchaMgr, fuelTokenMgr) {
     this.recaptchaMgr = recaptchaMgr;

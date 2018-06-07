@@ -85,6 +85,3 @@ functions:
     - http:
         path: check
         method: post
-
-
-

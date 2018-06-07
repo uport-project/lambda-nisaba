@@ -1,3 +1,13 @@
+/*
+file - authMgr.js - verifies authorization request to nisaba service
+
+resources
+- https://www.npmjs.com/package/jsontokens
+
+resource description
+- jsontokens - node.js library for signing, decoding, and
+verifying JSON Web Tokens (JWTs)
+*/
 import { decodeToken, TokenVerifier } from "jsontokens";
 // import { verifyJWT } from "did-jwt"
 

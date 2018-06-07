@@ -1,3 +1,13 @@
+/*
+file - funcaptchaMgr.js - leverages the funcaptcha service and verifies
+submitted token
+
+resources
+- https://funcaptcha.com/
+
+resource descriptions
+- funCaptcha: an interactive captcha service
+*/
 import rp from "request-promise";
 
 class FuncaptchaMgr {

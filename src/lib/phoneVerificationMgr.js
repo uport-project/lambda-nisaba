@@ -1,3 +1,14 @@
+/*
+file - phoneVerificationMgr.js - instantiates Nexmo service to verify
+phone number code sent via text
+
+resources
+- Nexmo - https://www.npmjs.com/package/nexmo
+- Nexmo - https://developer.nexmo.com/documentation
+
+resource description
+- Nexmo - Text/Voice and Verification API suite
+*/
 import Nexmo from "nexmo";
 import { decodeToken, TokenVerifier } from "jsontokens";
 import { Client } from "pg";

@@ -1,3 +1,19 @@
+/*
+file - check_verification.js
+
+Function:
+1. Verify device key
+2. Provide request token
+
+inputs
+- phoneVerificationMgr: Verify phone number code sent via text
+
+resources
+- N/A
+
+resource description
+- N/A
+*/
 class CheckVerificationHandler {
   constructor(phoneVerificationMgr) {
     this.phoneVerificationMgr = phoneVerificationMgr;
