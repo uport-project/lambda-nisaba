@@ -35,7 +35,7 @@
    There is nothing special about these keys. They are just `specp256k1` key pair. You can generate them here: https://kjur.github.io/jsrsasign/sample/sample-ecdsa.html
 9. Create nextmo account: https://dashboard.nexmo.com/getting-started-guide, get `NEXMO_API_KEY`, `NEXMO_API_SECRET`, `NEXMO_FROM`
 
-   (I'm not sure where to get `NEXMO_FROM`, I just specified a random phone number)
+     You can find `NEXMO_FROM` in the dashboard, 'Numbers -> Your numbers' section.
 10. Setup PostgreSQL locally
     
     Start server: `pg_ctl -D /usr/local/var/postgres start &`
@@ -85,5 +85,21 @@
 
       ```sls invoke local -f [function] -d [data]```
       
-      e.g. ```sls invoke local -f start -d '{"deviceKey": "0x123456", "phoneNumber": [your own phone number]}'```.
-      You'll get a text message.
+      
+      test the following **Phone Verification Flow**
+
+      You can choose a random string as a deviceKey
+
+      - start verification:
+      
+         ```sls invoke local -f start -d '{"deviceKey": "0x123456", "phoneNumber":[your phone number]}'```
+
+         Send a code through SMS or Call
+
+      - continue verification
+ 
+         ```sls invoke local -f next -d '{"pathParameters": {"deviceKey": "0x123456"}}'```
+ 
+       - verify code and request token
+ 
+         ```sls invoke local -f check -d '{"deviceKey": "0x123456", "code": [code you received]}'```
