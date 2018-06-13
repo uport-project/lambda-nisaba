@@ -42,6 +42,7 @@
     (Stop server: `pg_ctl -D /usr/local/var/postgres stop`)
     
     You need create a table `nextmo_requests`:
+    
     ```
     CREATE TABLE public.nexmo_requests
     (
@@ -52,8 +53,9 @@
     WITH (
       OIDS=FALSE
     );
-   ```
-   In this case `PG_URL=postgresql://localhost`
+    ```
+   
+      In this case `PG_URL=postgresql://localhost`
 11. Delete the old `kms-secrets.develop.us-west-2.yml` and `kms-secrets.master.us-west-2.yml`. 
 
       Generate your own using the following command:
