@@ -146,7 +146,7 @@ class PhoneVerificationMgr {
 
       if (resp.status == "0") {
         this.deleteRequest(deviceKey);
-        return { data: resp.request_id }, null;
+        return null, { data: resp.request_id };
       } else {
         return (
           null,
