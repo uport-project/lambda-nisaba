@@ -25,15 +25,17 @@
 5. In IAM management console, create a key for develop: https://console.aws.amazon.com/iam/home#/encryptionKeys/us-west-2
 
    If you want to deploy to master too, create another key for master.
-   Make sure the keys you created are in the correct region (`us-west-2`). If you decide to create keys in another reason, make sure to change region configuration in other places too.
+   Make sure the keys you created are in the correct region (`us-west-2`). If you decide to create keys in another region, make sure to change region configuration in other places too.
 6. Create reCaptcha account: https://www.google.com/recaptcha/admin, get `RECAPTCHA_SECRET_KEY`
+
+   (You only need to set this up if you want to use the reCAPTCHA verification flow, not need for phone verification flow)
 7. Create fun captcha account: https://www.funcaptcha.com/setup, get `FUNCAPTCHA_PRIVATE_KEY`.
 
-   (They currently ignore us after we fill in a form, skip this step for now)
+   (They currently ignore us after we fill in a form, skip this step for now; this is also not need for phone verification flow)
 8. Generate Fuel token private & public keys: `FUEL_TOKEN_PRIVATE_KEY`, `FUEL_TOKEN_PUBLIC_KEY`.
 
    There is nothing special about these keys. They are just `specp256k1` key pair. You can generate them here: https://kjur.github.io/jsrsasign/sample/sample-ecdsa.html
-9. Create nextmo account: https://dashboard.nexmo.com/getting-started-guide, get `NEXMO_API_KEY`, `NEXMO_API_SECRET`, `NEXMO_FROM`
+9. Create nexmo account: https://dashboard.nexmo.com/getting-started-guide, get `NEXMO_API_KEY`, `NEXMO_API_SECRET`, `NEXMO_FROM`
 
      You can find `NEXMO_FROM` in the dashboard, 'Numbers -> Your numbers' section.
 10. Setup PostgreSQL locally
@@ -41,7 +43,7 @@
     Start server: `pg_ctl -D /usr/local/var/postgres start &`
     (Stop server: `pg_ctl -D /usr/local/var/postgres stop`)
     
-    You need create a table `nextmo_requests`:
+    You need create a table `nexmo_requests`:
     
     ```
     CREATE TABLE public.nexmo_requests
@@ -97,6 +99,8 @@
          Send a code through SMS or Call
 
       - continue verification
+        
+        (This step is optional, it is for user who has previously indicated they prefer to recieve a code via text-to-speech, you'll receive a phone call.)
  
          ```sls invoke local -f next -d '{"pathParameters": {"deviceKey": "0x123456"}}'```
  
