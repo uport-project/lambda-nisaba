@@ -46,7 +46,8 @@ let continueVerificationHandler = new ContinueVerificationHandler(
   phoneVerificationMgr
 );
 let checkVerificationHandler = new CheckVerificationHandler(
-  phoneVerificationMgr
+  phoneVerificationMgr,
+  fuelTokenMgr
 );
 
 //verifies recaptcha token and provides fuel token

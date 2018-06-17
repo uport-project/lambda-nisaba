@@ -15,8 +15,9 @@ resource description
 - N/A
 */
 class CheckVerificationHandler {
-  constructor(phoneVerificationMgr) {
+  constructor(phoneVerificationMgr, fuelTokenMgr) {
     this.phoneVerificationMgr = phoneVerificationMgr;
+    this.fuelTokenMgr = fuelTokenMgr;
   }
 
   debug(l) {
@@ -59,14 +60,17 @@ class CheckVerificationHandler {
 
     try {
       //Verify & request token
-      this.phoneVerificationMgr.check(deviceKey, code).then((resp, err) => {
+      this.phoneVerificationMgr.check(deviceKey, code).then(async (resp, err) => {
         if (err) {
           throw {
             code: 500,
             message: err.message
           };
         }
-        cb(null, { data: resp.data });
+
+        //Get fuel token
+        let fuelToken = await this.fuelTokenMgr.newToken(deviceKey);
+        cb(null, fuelToken);
       });
     } catch (err) {
       cb({

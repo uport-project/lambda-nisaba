@@ -95,6 +95,15 @@ The `functions` block defines what code to deploy. These are the methods of your
 
 - **kms-secrets.master.us-west-2.yml** - A file that is automatically generated once secrets are encrypted by the sls encryption command noted in the SECRETS.md file. This is for the master stage service. Create a KMS key in AWS IAM service, under Encryption keys. Collect the key id, which is the remaining part of the key ARN.
 
+### Datastore Schema
+The Nisaba service leverages a centralized, off-chain sotre in order to provide better consistency than querying the blockchain for past transactiond data. The service leverages an [AWS RDS PostgreSQL](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_GettingStarted.CreatingConnecting.PostgreSQL.html) instance to save transaction and nonce data from transactions being passed through the service. The following are the two tables within the PostgreSQL database (given the initial repository codebase): 
+
+**Table 1: Nexmo_Requests**
+
+- Column 1: request_id
+- Column 2: device_key
+- Column 3: request_status
+      
 ### How do we start this up?
 1. Open your terminal and choose a folder path you'd like to store the project in 
 
