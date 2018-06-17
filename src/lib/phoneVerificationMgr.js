@@ -56,10 +56,19 @@ class PhoneVerificationMgr {
     //uport specifc [US1]
     let params = {
       number: phoneNumber,
-      brand: "uPort",
+      brand: "NexmoVerifyTest",
       code_length: 6
     };
 
+    /*
+      resource:  https://developer.nexmo.com/api/verify#verify-request
+      required params
+        format - json The response format. Either json or xml
+        brand - The name of the company or App you are using Verify for
+        number - The mobile or landline phone number to verify
+        code_length - The length of the PIN. Possible values are 6 or 4 characters.
+        The default value is 4
+    */
     this.nexmo.verify.request(params, (err, resp) => {
       if (err) {
         console.log("error on nexmo.verify.request", err);
