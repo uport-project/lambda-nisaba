@@ -53,6 +53,7 @@ class PhoneVerificationMgr {
     if (!phoneNumber) throw "no destination phoneNumber";
     if (!this.nexmo) throw "client is not initialized";
 
+    //uport specifc [US1]
     let params = {
       number: phoneNumber,
       brand: "uPort",
@@ -158,6 +159,15 @@ class PhoneVerificationMgr {
       }
     });
   }
+
+  /*
+    schema information for nexmo requests:
+      table: nexmo_requests
+      columns
+        - request_id
+        - device_key
+        - request_status
+  */
 
   async getNexmoRequest(deviceKey) {
     if (!deviceKey) throw "no device key";

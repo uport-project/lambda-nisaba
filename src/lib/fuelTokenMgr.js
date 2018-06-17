@@ -32,6 +32,7 @@ class FuelTokenMgr {
     this.tokenSigner = SimpleSigner(this.signingKey);
   }
 
+  /* Uport specific - needs to be changed for other builds */
   async newToken(deviceKey) {
     const signer = this.tokenSigner;
     let now = Math.floor(Date.now() / 1000);
@@ -52,6 +53,7 @@ class FuelTokenMgr {
     });
   }
 
+  /* Uport specific - needs to be changed for other builds */
   async verifyToken(fuelToken) {
     let aud = [
       "api.uport.me/nisaba",
