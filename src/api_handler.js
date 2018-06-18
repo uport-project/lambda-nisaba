@@ -3,14 +3,12 @@ const AWS = require("aws-sdk");
 const querystring = require("querystring");
 require('ethr-did-resolver')()
 require('uport-did-resolver')()
-const RecaptchaMgr = require("./lib/recaptchaMgr");
 const AuthMgr = require("./lib/authMgr");
 const FuelTokenMgr = require("./lib/fuelTokenMgr");
 const UPortMgr = require("./lib/uPortMgr");
 const AttestationMgr = require("./lib/attestationMgr");
 const PhoneVerificationMgr = require("./lib/phoneVerificationMgr");
 
-const RecaptchaHandler = require("./handlers/recaptcha");
 const NewDeviceKeyHandler = require("./handlers/newDeviceKey");
 const PhoneAttestationHandler = require("./handlers/phone_attestation");
 const StartVerificationHandler = require("./handlers/start_verification");
@@ -18,14 +16,12 @@ const ContinueVerificationHandler = require("./handlers/continue_verification");
 const CheckVerificationHandler = require("./handlers/check_verification");
 
 //instantiate manager services needed for methods
-let recaptchaMgr = new RecaptchaMgr(); //setting and verify the captcha token
 let authMgr = new AuthMgr(); //verifies authorization request to nisaba service
 let fuelTokenMgr = new FuelTokenMgr(); //develops new JWT tokens for new users
 let uPortMgr = new UPortMgr(); //uport specific JWT token verification
 let attestationMgr = new AttestationMgr(); // Create attestation for the subscriber
 let phoneVerificationMgr = new PhoneVerificationMgr(); //Verify phone number code sent via text
 
-let recaptchaHandler = new RecaptchaHandler(recaptchaMgr, fuelTokenMgr);
 let newDeviceKeyHandler = new NewDeviceKeyHandler(
   authMgr,
   uPortMgr,

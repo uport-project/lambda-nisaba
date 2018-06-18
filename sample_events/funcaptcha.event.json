@@ -1,6 +1,0 @@
-{   
-    "headers": {
-        "content-type": "application/json"
-    },
-    "body": "{\"deviceKey\":\"0x1234\",\"funCaptchaToken\":\"https://funcaptcha.com/fc/v/?private_key=DF2EA6DC-FDEE-24D9-FA95-3CF9F717DA76&session_token=8205a12d9c3418ea8.83310539%7Cr=us-east-1%7Cmetabgclr=%23edf0f5%7Cguitextcolor=%23000000%7Cmetaiconclr=%23aebad3%7Cmeta=3%7Cpk=87A905BC-830E-6F0F-0202-B64D14CA6675%7Ccdn_url=https://cdn.funcaptcha.com/fc%7Csurl=https://funcaptcha.com\"}"
-}
