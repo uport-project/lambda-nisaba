@@ -115,7 +115,7 @@ const doHandler = (handler, event, context, callback) => {
         })
       };
     } else {
-      //console.log(err);
+      console.log(err);
       let code = 500;
       if (err.code) code = err.code;
       let message = err;
