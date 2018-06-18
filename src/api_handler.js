@@ -4,7 +4,6 @@ const querystring = require("querystring");
 require('ethr-did-resolver')()
 require('uport-did-resolver')()
 const RecaptchaMgr = require("./lib/recaptchaMgr");
-const FuncaptchaMgr = require("./lib/funcaptchaMgr");
 const AuthMgr = require("./lib/authMgr");
 const FuelTokenMgr = require("./lib/fuelTokenMgr");
 const UPortMgr = require("./lib/uPortMgr");
