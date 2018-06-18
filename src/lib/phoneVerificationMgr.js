@@ -43,7 +43,7 @@ class PhoneVerificationMgr {
       },
       {
         debug: false,
-        appendToUserAgent: "uPort/nisaba"
+        appendToUserAgent: "NexmoVerifyTest/nisaba"
       }
     );
   }
@@ -206,6 +206,7 @@ class PhoneVerificationMgr {
     if (!reqStatus) throw "no nexmo request status";
     if (!this.pgUrl) throw "no pgUrl set";
 
+    //you can use a connectionString or a normal connection
     const pgClient = new Client({
       connectionString: this.pgUrl
     });
