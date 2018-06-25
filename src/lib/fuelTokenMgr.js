@@ -21,6 +21,7 @@ class FuelTokenMgr {
     this.signingKey = null;
     this.publicKey = null;
     this.address = null;
+    this.aud = null;
     this.tokenSigner = null;
   }
   isSecretsSet() {
@@ -31,8 +32,8 @@ class FuelTokenMgr {
     this.signingKey = secrets.FUEL_TOKEN_PRIVATE_KEY;
     this.publicKey = secrets.FUEL_TOKEN_PUBLIC_KEY;
     this.address = secrets.FUEL_TOKEN_ADDRESS;
-    this.aud = secrets.SENSUI_ADDRESS ?
-      [secrets.FUEL_TOKEN_ADDRESS, secrets.SENSUI_ADDRESS] : secrets.FUEL_TOKEN_ADDRESS;
+    // did-jwt doese not support aud to be an array
+    this.aud = secrets.AUDIENCE_ADDRESS || this.address;
     this.tokenSigner = SimpleSigner(this.signingKey);
   }
 
@@ -48,17 +49,13 @@ class FuelTokenMgr {
         iat: now
       },
       { issuer: this.address, signer }
-    ).then(jwt => {
-      return jwt;
-    });
+    );
   }
 
   /* Uport specific - needs to be changed for other builds */
   async verifyToken(fuelToken) {
-    verifyJWT(fuelToken, {
+    return verifyJWT(fuelToken, {
       audience: this.aud
-    }).then(({ payload, doc, did, signer, jwt }) => {
-      console.log(payload);
     });
   }
 
