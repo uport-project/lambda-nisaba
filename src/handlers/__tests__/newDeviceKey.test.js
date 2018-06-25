@@ -3,11 +3,11 @@ const NewDeviceKeyHandler = require("../newDeviceKey");
 describe("NewDeviceKeyHandler", () => {
   let sut;
   let authMgr = { verifyNisaba: jest.fn() };
-  let uPortMgr = { verifyToken: jest.fn() };
-  let fuelTokenMgr = { newToken: jest.fn() };
+  let requestTokenMgr = { verifyToken: jest.fn() };
+  let fuelTokenMgr = { newToken: jest.fn(), verifyToken: jest.fn() };
 
   beforeAll(() => {
-    sut = new NewDeviceKeyHandler(authMgr, uPortMgr, fuelTokenMgr);
+    sut = new NewDeviceKeyHandler(authMgr, requestTokenMgr, fuelTokenMgr);
   });
 
   test("empty constructor", () => {
@@ -47,13 +47,13 @@ describe("NewDeviceKeyHandler", () => {
     });
   });
 
-  test("handle failed uPortMgr.verifyToken", done => {
-    uPortMgr.verifyToken.mockImplementation(() => {
+  test("handle failed requestTokenMgr.verifyToken", done => {
+    requestTokenMgr.verifyToken.mockImplementation(() => {
       throw { message: "failed" };
     });
     sut.handle({ requestToken: "request.token.fake" }, {}, (err, res) => {
-      expect(uPortMgr.verifyToken).toBeCalled();
-      expect(uPortMgr.verifyToken).toBeCalledWith("request.token.fake");
+      expect(requestTokenMgr.verifyToken).toBeCalled();
+      expect(requestTokenMgr.verifyToken).toBeCalledWith("request.token.fake");
       expect(err.code).toEqual(500);
       expect(err.message).toEqual("failed");
       done();

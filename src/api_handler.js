@@ -7,7 +7,7 @@ const RecaptchaMgr = require("./lib/recaptchaMgr");
 const FuncaptchaMgr = require("./lib/funcaptchaMgr");
 const AuthMgr = require("./lib/authMgr");
 const FuelTokenMgr = require("./lib/fuelTokenMgr");
-const RequestTokenMgr = require("./lib/RequestTokenMgr");
+const RequestTokenMgr = require("./lib/requestTokenMgr");
 const AttestationMgr = require("./lib/attestationMgr");
 const PhoneVerificationMgr = require("./lib/phoneVerificationMgr");
 

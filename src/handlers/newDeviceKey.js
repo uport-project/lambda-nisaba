@@ -20,9 +20,9 @@ resource description
 import { toEthereumAddress } from "did-jwt/lib/Digest";
 
 class NewDeviceKeyHandler {
-  constructor(authMgr, uPortMgr, fuelTokenMgr) {
+  constructor(authMgr, requestTokenMgr, fuelTokenMgr) {
     this.authMgr = authMgr;
-    this.uPortMgr = uPortMgr;
+    this.requestTokenMgr = requestTokenMgr;
     this.fuelTokenMgr = fuelTokenMgr;
   }
 
@@ -33,6 +33,17 @@ class NewDeviceKeyHandler {
     } catch (err) {
       console.log("Error on this.authMgr.verifyNisaba");
       console.log(err);
+      cb({
+        code: 401,
+        message: err
+      });
+      return;
+    }
+
+    try {
+      await this.fuelTokenMgr.verifyToken(authToken);
+    } catch (err) {
+      console.log("Error on this.fuelTokenMgr.verifyToken", err);
       cb({
         code: 401,
         message: err
@@ -74,9 +85,9 @@ class NewDeviceKeyHandler {
     //Verify Request Token
     let dRequestToken;
     try {
-      dRequestToken = await this.uPortMgr.verifyToken(body.requestToken);
+      dRequestToken = await this.requestTokenMgr.verifyToken(body.requestToken);
     } catch (err) {
-      console.log("Error on this.uPortMgr.verifyToken");
+      console.log("Error on this.requestTokenMgr.verifyToken");
       console.log(err);
       const errMsg = !err.message ? err : err.message;
       cb({
@@ -99,7 +110,7 @@ class NewDeviceKeyHandler {
 
     //Check if address on fuelToken (authToken) is the same as the one on the requestToken
     if (address != authToken.sub) {
-      console.log("authToken.sub !== decodedRequestToken..address");
+      console.log("authToken.sub !== decodedRequestToken.address");
       cb({
         code: 403,
         message:
