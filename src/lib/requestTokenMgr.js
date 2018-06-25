@@ -2,17 +2,15 @@ import { verifyJWT } from "did-jwt/lib/JWT";
 
 class RequestTokenMgr {
   constructor() {
-    this.address = null;
     this.aud = null;
   }
 
   isSecretsSet() {
-    return this.address != null;
+    return this.aud != null;
   }
 
   setSecrets(secrets) {
-    this.address = secrets.FUEL_TOKEN_ADDRESS;
-    this.aud = secrets.AUDIENCE_ADDRESS || this.address;
+    this.aud = secrets.AUDIENCE_ADDRESS || secrets.FUEL_TOKEN_ADDRESS;
   }
 
   async verifyToken(token) {
