@@ -99,7 +99,7 @@ describe("PhoneVerificationMgr", () => {
   test("start() happy path", done => {
     let params = {
       number: phoneNumber,
-      brand: "uPort",
+      brand: "NexmoVerifyTest",
       code_length: 6
     };
 
