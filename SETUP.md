@@ -35,7 +35,9 @@
 8. Generate Fuel token private & public keys and address: `FUEL_TOKEN_PRIVATE_KEY`, `FUEL_TOKEN_PUBLIC_KEY`, `FUEL_TOKEN_ADDRESS`.
 
    Create an app e.g. nisaba on uport app manager: https://appmanager.uport.me/, you can see the ```address``` and ```public key``` (remove the `0x`) listed there. Click `click here for app code`, you can get the ```private key``` inside ```SimpleSinger```.
-9. If you want the JWT payload aud to include sensui (https://github.com/ConsenSys/lambda-sensui), create an app e.g. sensui on uport app manager: https://appmanager.uport.me/, get the ```address``` for ```SENSUI_ADDRESS```.
+9. If you want the JWT payload aud to be another app rather than this one, you can create an app e.g. sensui on uport app manager: https://appmanager.uport.me/, get the ```address``` for ```AUDIENCE_ADDRESS```.
+
+     Note: for step 8 and step 9, if in doubt, you can append ```did:uport:``` to ```address``` and test it out in the uport did resolver: http://uportdid.radicalledger.com/.
 10. Create nexmo account: https://dashboard.nexmo.com/getting-started-guide, get `NEXMO_API_KEY`, `NEXMO_API_SECRET`, `NEXMO_FROM`
 
      You can find `NEXMO_FROM` in the dashboard, 'Numbers -> Your numbers' section.
@@ -78,7 +80,7 @@
       FUEL_TOKEN_PRIVATE_KEY
       FUEL_TOKEN_PUBLIC_KEY
       FUEL_TOKEN_ADDRESS
-      SENSUI_ADDRESS
+      AUDIENCE_ADDRESS
       NEXMO_API_KEY
       NEXMO_API_SECRET
       NEXMO_FROM
