@@ -28,17 +28,18 @@
    Make sure the keys you created are in the correct region (`us-west-2`). If you decide to create keys in another region, make sure to change region configuration in other places too.
 6. Create reCaptcha account: https://www.google.com/recaptcha/admin, get `RECAPTCHA_SECRET_KEY`
 
-   (You only need to set this up if you want to use the reCAPTCHA verification flow, not need for phone verification flow)
+   (You only need to set this up if you want to use the reCAPTCHA verification flow, not needed for phone verification flow)
 7. Create fun captcha account: https://www.funcaptcha.com/setup, get `FUNCAPTCHA_PRIVATE_KEY`.
 
-   (They currently ignore us after we fill in a form, skip this step for now; this is also not need for phone verification flow)
-8. Generate Fuel token private & public keys: `FUEL_TOKEN_PRIVATE_KEY`, `FUEL_TOKEN_PUBLIC_KEY`.
+   (They currently ignore us after we fill in a form, skip this step for now; this is also not needed for phone verification flow)
+8. Generate Fuel token private & public keys and address: `FUEL_TOKEN_PRIVATE_KEY`, `FUEL_TOKEN_PUBLIC_KEY`, `FUEL_TOKEN_ADDRESS`.
 
-   There is nothing special about these keys. They are just `specp256k1` key pair. You can generate them here: https://kjur.github.io/jsrsasign/sample/sample-ecdsa.html
-9. Create nexmo account: https://dashboard.nexmo.com/getting-started-guide, get `NEXMO_API_KEY`, `NEXMO_API_SECRET`, `NEXMO_FROM`
+   Create an app e.g. nisaba on uport app manager: https://appmanager.uport.me/, you can see the ```address``` and ```public key``` (remove the `0x`) listed there. Click `click here for app code`, you can get the ```private key``` inside ```SimpleSinger```.
+9. If you want the JWT payload aud to include sensui (https://github.com/ConsenSys/lambda-sensui), create an app e.g. sensui on uport app manager: https://appmanager.uport.me/, get the ```address``` for ```SENSUI_ADDRESS```.
+10. Create nexmo account: https://dashboard.nexmo.com/getting-started-guide, get `NEXMO_API_KEY`, `NEXMO_API_SECRET`, `NEXMO_FROM`
 
      You can find `NEXMO_FROM` in the dashboard, 'Numbers -> Your numbers' section.
-10. Setup PostgreSQL locally
+11. Setup PostgreSQL locally
     
     Start server: `pg_ctl -D /usr/local/var/postgres start &`
     (Stop server: `pg_ctl -D /usr/local/var/postgres stop`)
@@ -58,7 +59,7 @@
     ```
    
       In this case `PG_URL=postgresql://localhost`
-11. Delete the old `kms-secrets.develop.us-west-2.yml` and `kms-secrets.master.us-west-2.yml`. 
+12. Delete the old `kms-secrets.develop.us-west-2.yml` and `kms-secrets.master.us-west-2.yml`. 
 
       Generate your own using the following command:
 
@@ -76,6 +77,8 @@
       FUNCAPTCHA_PRIVATE_KEY
       FUEL_TOKEN_PRIVATE_KEY
       FUEL_TOKEN_PUBLIC_KEY
+      FUEL_TOKEN_ADDRESS
+      SENSUI_ADDRESS
       NEXMO_API_KEY
       NEXMO_API_SECRET
       NEXMO_FROM
@@ -83,7 +86,7 @@
       ```
    
       Run `sls decrypt` to check the encryption works correctly.
-12. Now you can run locally
+13. Now you can run locally
 
       ```sls invoke local -f [function] -d [data]```
       
