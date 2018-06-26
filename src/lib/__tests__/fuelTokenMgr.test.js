@@ -7,6 +7,8 @@ describe("FuelTokenMgr", () => {
     "278a5de700e29faae8e40e366ec5012b5ec63d36ec77e8a2417154cc1d25383f";
   let ftPubKey =
     "03fdd57adec3d438ea237fe46b33ee1e016eda6b585c3e27ea66686c2ea5358479";
+  let ftAddress =
+    "4a40d30db3bed8b02cff6666125a7f659ac1f601";
 
   beforeAll(() => {
     sut = new FuelTokenMgr();
@@ -25,7 +27,8 @@ describe("FuelTokenMgr", () => {
     expect(sut.isSecretsSet()).toEqual(false);
     sut.setSecrets({
       FUEL_TOKEN_PRIVATE_KEY: ftPrivKey,
-      FUEL_TOKEN_PUBLIC_KEY: ftPubKey
+      FUEL_TOKEN_PUBLIC_KEY: ftPubKey,
+      FUEL_TOKEN_ADDRESS: ftAddress
     });
     expect(sut.isSecretsSet()).toEqual(true);
   });

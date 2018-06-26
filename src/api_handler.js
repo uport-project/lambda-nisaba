@@ -7,7 +7,7 @@ const RecaptchaMgr = require("./lib/recaptchaMgr");
 const FuncaptchaMgr = require("./lib/funcaptchaMgr");
 const AuthMgr = require("./lib/authMgr");
 const FuelTokenMgr = require("./lib/fuelTokenMgr");
-const UPortMgr = require("./lib/uPortMgr");
+const RequestTokenMgr = require("./lib/requestTokenMgr");
 const AttestationMgr = require("./lib/attestationMgr");
 const PhoneVerificationMgr = require("./lib/phoneVerificationMgr");
 
@@ -24,7 +24,7 @@ let recaptchaMgr = new RecaptchaMgr(); //setting and verify the captcha token
 let funcaptchaMgr = new FuncaptchaMgr(); //interactive captcha service (JWT token generation)
 let authMgr = new AuthMgr(); //verifies authorization request to nisaba service
 let fuelTokenMgr = new FuelTokenMgr(); //develops new JWT tokens for new users
-let uPortMgr = new UPortMgr(); //uport specific JWT token verification
+let requestTokenMgr = new RequestTokenMgr(); // Generate and verify request token
 let attestationMgr = new AttestationMgr(); // Create attestation for the subscriber
 let phoneVerificationMgr = new PhoneVerificationMgr(); //Verify phone number code sent via text
 
@@ -32,7 +32,7 @@ let recaptchaHandler = new RecaptchaHandler(recaptchaMgr, fuelTokenMgr);
 let funcaptchaHandler = new FuncaptchaHandler(funcaptchaMgr, fuelTokenMgr);
 let newDeviceKeyHandler = new NewDeviceKeyHandler(
   authMgr,
-  uPortMgr,
+  requestTokenMgr,
   fuelTokenMgr
 );
 let phoneAttestationHandler = new PhoneAttestationHandler(
@@ -106,6 +106,7 @@ const postHandler = (handler, event, context, callback) => {
         authMgr.setSecrets(JSON.parse(decrypted));
         fuelTokenMgr.setSecrets(JSON.parse(decrypted));
         phoneVerificationMgr.setSecrets(JSON.parse(decrypted));
+        requestTokenMgr.setSecrets(JSON.parse(decrypted));
         doHandler(handler, event, context, callback);
       });
   } else {

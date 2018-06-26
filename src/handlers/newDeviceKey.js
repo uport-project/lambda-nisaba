@@ -20,9 +20,9 @@ resource description
 import { toEthereumAddress } from "did-jwt/lib/Digest";
 
 class NewDeviceKeyHandler {
-  constructor(authMgr, uPortMgr, fuelTokenMgr) {
+  constructor(authMgr, requestTokenMgr, fuelTokenMgr) {
     this.authMgr = authMgr;
-    this.uPortMgr = uPortMgr;
+    this.requestTokenMgr = requestTokenMgr;
     this.fuelTokenMgr = fuelTokenMgr;
   }
 
@@ -74,9 +74,9 @@ class NewDeviceKeyHandler {
     //Verify Request Token
     let dRequestToken;
     try {
-      dRequestToken = await this.uPortMgr.verifyToken(body.requestToken);
+      dRequestToken = await this.requestTokenMgr.verifyToken(body.requestToken);
     } catch (err) {
-      console.log("Error on this.uPortMgr.verifyToken");
+      console.log("Error on this.requestTokenMgr.verifyToken");
       console.log(err);
       const errMsg = !err.message ? err : err.message;
       cb({
@@ -88,9 +88,12 @@ class NewDeviceKeyHandler {
     console.log(dRequestToken);
 
     console.log("dRequestToken publicKey", dRequestToken.doc.publicKey);
-    const pubKey = dRequestToken.doc.publicKey.find(
-      pub => pub.type === "Secp256k1VerificationKey2018"
-    );
+
+    // Don't know why only support "Secp256k1VerificationKey2018"???
+    // const pubKey = dRequestToken.doc.publicKey.find(
+    //   pub => pub.type === "Secp256k1VerificationKey2018"
+    // );
+    const pubKey = dRequestToken.doc.publicKey[0];
     const address =
       pubKey.ethereumAddress || toEthereumAddress(pubKey.publicKeyHex);
 
@@ -99,7 +102,7 @@ class NewDeviceKeyHandler {
 
     //Check if address on fuelToken (authToken) is the same as the one on the requestToken
     if (address != authToken.sub) {
-      console.log("authToken.sub !== decodedRequestToken..address");
+      console.log("authToken.sub !== decodedRequestToken.address");
       cb({
         code: 403,
         message:
