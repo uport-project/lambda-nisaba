@@ -37,7 +37,7 @@
    Create an app e.g. nisaba on uport app manager: https://appmanager.uport.me/, you can see the ```address``` and ```public key``` (remove the `0x`) listed there. Click `click here for app code`, you can get the ```private key``` inside ```SimpleSinger```.
 9. If you want the JWT payload aud to be another app rather than this one, you can create an app e.g. sensui on uport app manager: https://appmanager.uport.me/, get the ```address``` for ```AUDIENCE_ADDRESS```.
 
-     Note: for step 8 and step 9, if in doubt, you can append ```did:uport:``` to ```address``` and test it out in the uport did resolver: http://uportdid.radicalledger.com/.
+     Note: for step 8 and 9, you can also generate these keys using https://github.com/uport-project/uport-cli-client. If in doubt, you can append ```did:uport:``` to the ```address``` (mnid) and test it out in the uport did resolver: http://uportdid.radicalledger.com/.
 10. Create nexmo account: https://dashboard.nexmo.com/getting-started-guide, get `NEXMO_API_KEY`, `NEXMO_API_SECRET`, `NEXMO_FROM`
 
      You can find `NEXMO_FROM` in the dashboard, 'Numbers -> Your numbers' section.
@@ -94,12 +94,14 @@
       
       
       test the following **Phone Verification Flow**
-
-      You can choose a random string as a deviceKey
-
+      
+      Use this to generate keys: https://github.com/uport-project/uport-cli-client
+ 
+      After `uPort Identity Created!`, the console will print out a `UPortClient` object. Use `UPortClient.deviceKeys.address` as `deviceKey`. (remember `UPortClient.deviceKeys.privateKey` and `UPortClient.mnid`).
+      
       - start verification:
       
-         ```sls invoke local -f start -d '{"deviceKey": "0x123456", "phoneNumber":[your phone number]}'```
+         ```sls invoke local -f start -d '{"deviceKey": [deviceKey], "phoneNumber":[your phone number]}'```
 
          Send a code through SMS or Call
 
@@ -107,8 +109,38 @@
         
         (This step is optional, it is for user who has previously indicated they prefer to recieve a code via text-to-speech, you'll receive a phone call.)
  
-         ```sls invoke local -f next -d '{"pathParameters": {"deviceKey": "0x123456"}}'```
+         ```sls invoke local -f next -d '{"pathParameters": {"deviceKey": [deviceKey]}}'```
  
-       - verify code and request token
+       - verify code and get fuelToken
  
-         ```sls invoke local -f check -d '{"deviceKey": "0x123456", "code": [code you received]}'```
+         ```sls invoke local -f check -d '{"deviceKey":[deviceKey], "code": [code you received]}'```
+         you'll receive a fuelToken
+       - get new fuelToken with new deviceKey
+
+         Once you already get a fuelToken, if you have a new deviceKey, you don't need to go through the above phone verification flow anymore, you can generate a new fuelToken with the old fuelToken and the new deviceKey.
+         
+         You'll need to generate a requestToken as follows:
+         ```
+         const createJWT = require('did-jwt').createJWT;
+         const SimpleSigner = require('did-jwt').SimpleSigner;
+
+         const signer = new SimpleSigner(UPortClient.deviceKeys.privateKey.slice(2));
+         const issuer = UPortClient.mnid;
+
+         const now = Math.floor(Date.now() / 1000);
+         const aud = secrets.AUDIENCE_ADDRESS;
+
+         const requestToken = await createJWT(
+           {
+             aud,
+             exp: now + 300,
+             iat: now,
+             newDeviceKey: newDeviceKey
+           },
+           { issuer, signer }
+         );
+         ``` 
+ 
+         ```sls invoke local -f newDeviceKey -d '{"headers: {"Authorization": "bearer [old fuelToken]"}, requestToken": [requestToken]}'```
+ 
+         You'll get a new fuelToken.
