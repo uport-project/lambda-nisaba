@@ -1,3 +1,12 @@
+/*
+file - attestationMgr.js - Create attestation for the subscriber
+
+resources
+- N/A
+
+resource description
+- N/A
+*/
 import { Credentials, SimpleSigner } from "uport";
 
 class AttestationMgr {

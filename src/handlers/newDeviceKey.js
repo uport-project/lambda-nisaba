@@ -1,9 +1,28 @@
+/*
+file - newDeviceKey.js
+
+Function:
+1. Verify Request Token (based on uport standards)
+2. Check if address on fuelToken (authToken) is the same as the one on the requestToken
+3. If yes, Issue new fuelToken
+
+inputs
+- authMgr: verifies authorization request to nisaba service
+- uPortMgr: uport specific JWT token verification
+- fuelTokenMgr: develops new JWT tokens for new users
+
+resources
+- N/A
+
+resource description
+- N/A
+*/
 import { toEthereumAddress } from "did-jwt/lib/Digest";
 
 class NewDeviceKeyHandler {
-  constructor(authMgr, uPortMgr, fuelTokenMgr) {
+  constructor(authMgr, requestTokenMgr, fuelTokenMgr) {
     this.authMgr = authMgr;
-    this.uPortMgr = uPortMgr;
+    this.requestTokenMgr = requestTokenMgr;
     this.fuelTokenMgr = fuelTokenMgr;
   }
 
@@ -55,9 +74,9 @@ class NewDeviceKeyHandler {
     //Verify Request Token
     let dRequestToken;
     try {
-      dRequestToken = await this.uPortMgr.verifyToken(body.requestToken);
+      dRequestToken = await this.requestTokenMgr.verifyToken(body.requestToken);
     } catch (err) {
-      console.log("Error on this.uPortMgr.verifyToken");
+      console.log("Error on this.requestTokenMgr.verifyToken");
       console.log(err);
       const errMsg = !err.message ? err : err.message;
       cb({
@@ -69,18 +88,21 @@ class NewDeviceKeyHandler {
     console.log(dRequestToken);
 
     console.log("dRequestToken publicKey", dRequestToken.doc.publicKey);
-    const pubKey = dRequestToken.doc.publicKey.find(
-      pub => pub.type === "Secp256k1VerificationKey2018"
-    );
+
+    // Don't know why only support "Secp256k1VerificationKey2018"???
+    // const pubKey = dRequestToken.doc.publicKey.find(
+    //   pub => pub.type === "Secp256k1VerificationKey2018"
+    // );
+    const pubKey = dRequestToken.doc.publicKey[0];
     const address =
       pubKey.ethereumAddress || toEthereumAddress(pubKey.publicKeyHex);
 
     console.log("REQ TOKEN ADDR  : ", address);
     console.log("FUEL TOKEN ADDR : ", authToken.sub);
 
-    //Check if address on fuelToken (authToken) is the same as the one on the requesToken
+    //Check if address on fuelToken (authToken) is the same as the one on the requestToken
     if (address != authToken.sub) {
-      console.log("authToken.sub !== decodedRequestToken..address");
+      console.log("authToken.sub !== decodedRequestToken.address");
       cb({
         code: 403,
         message:

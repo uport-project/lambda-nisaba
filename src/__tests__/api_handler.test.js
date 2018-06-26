@@ -65,22 +65,4 @@ describe("apiHandler", () => {
       done();
     });
   });
-
-  test("funcaptcha()", done => {
-    apiHandler.funcaptcha({}, {}, (err, res) => {
-      expect(err).toBeNull();
-      expect(res).not.toBeNull();
-
-      done();
-    });
-  });
-
-  test("recaptcha()", done => {
-    apiHandler.recaptcha({}, {}, (err, res) => {
-      expect(err).toBeNull();
-      expect(res).not.toBeNull();
-
-      done();
-    });
-  });
 });

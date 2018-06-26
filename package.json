@@ -1,7 +1,7 @@
 {
-  "name": "lambda-nisaba",
+  "name": "lambda-nisaba-si",
   "version": "1.2.0",
-  "description": "uPort anti-sybil & fuel token generator service",
+  "description": "fuel token generator service",
   "main": "index.js",
   "scripts": {
     "test": "jest --verbose --runInBand",
@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/uport-project/lambda-nisaba.git"
+    "url": "git+https://github.com/consensys/lambda-nisaba.git"
   },
   "contributors": [
     {
@@ -28,15 +28,17 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/uport-project/lambda-nisaba/issues"
+    "url": "https://github.com/consensys/lambda-nisaba/issues"
   },
-  "homepage": "https://github.com/uport-project/lambda-nisaba#readme",
+  "homepage": "https://github.com/consensys/lambda-nisaba#readme",
   "devDependencies": {
     "aws-sdk-mock": "^1.7.0",
     "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.6.0",
-    "did-jwt": "^0.0.8",
-    "jest": "^21.2.0"
+    "did-jwt": "0.0.8",
+    "jest": "^21.2.0",
+    "serverless-kms-secrets": "^1.0.3",
+    "serverless-webpack": "^3.1.2"
   },
   "dependencies": {
     "ethr-did-resolver": "^0.0.8",
@@ -45,8 +47,6 @@
     "pg": "^7.4.0",
     "request": "^2.83.0",
     "request-promise": "^4.2.2",
-    "serverless-kms-secrets": "^1.0.2",
-    "serverless-webpack": "^3.1.0",
     "uport": "^0.7.0-alpha-2",
     "uport-did-resolver": "^0.0.2",
     "webpack": "^3.6.0",

@@ -1,3 +1,14 @@
+/*
+file - phoneVerificationMgr.js - instantiates Nexmo service to verify
+phone number code sent via text
+
+resources
+- Nexmo - https://www.npmjs.com/package/nexmo
+- Nexmo - https://developer.nexmo.com/documentation
+
+resource description
+- Nexmo - Text/Voice and Verification API suite
+*/
 import Nexmo from "nexmo";
 import { decodeToken, TokenVerifier } from "jsontokens";
 import { Client } from "pg";
@@ -32,7 +43,7 @@ class PhoneVerificationMgr {
       },
       {
         debug: false,
-        appendToUserAgent: "uPort/nisaba"
+        appendToUserAgent: "NexmoVerifyTest/nisaba"
       }
     );
   }
@@ -42,12 +53,22 @@ class PhoneVerificationMgr {
     if (!phoneNumber) throw "no destination phoneNumber";
     if (!this.nexmo) throw "client is not initialized";
 
+    //uport specifc [US1]
     let params = {
       number: phoneNumber,
-      brand: "uPort",
+      brand: "NexmoVerifyTest",
       code_length: 6
     };
 
+    /*
+      resource:  https://developer.nexmo.com/api/verify#verify-request
+      required params
+        format - json The response format. Either json or xml
+        brand - The name of the company or App you are using Verify for
+        number - The mobile or landline phone number to verify
+        code_length - The length of the PIN. Possible values are 6 or 4 characters.
+        The default value is 4
+    */
     this.nexmo.verify.request(params, (err, resp) => {
       if (err) {
         console.log("error on nexmo.verify.request", err);
@@ -135,7 +156,7 @@ class PhoneVerificationMgr {
 
       if (resp.status == "0") {
         this.deleteRequest(deviceKey);
-        return { data: resp.request_id }, null;
+        return null, { data: resp.request_id };
       } else {
         return (
           null,
@@ -147,6 +168,15 @@ class PhoneVerificationMgr {
       }
     });
   }
+
+  /*
+    schema information for nexmo requests:
+      table: nexmo_requests
+      columns
+        - request_id
+        - device_key
+        - request_status
+  */
 
   async getNexmoRequest(deviceKey) {
     if (!deviceKey) throw "no device key";
@@ -176,6 +206,7 @@ class PhoneVerificationMgr {
     if (!reqStatus) throw "no nexmo request status";
     if (!this.pgUrl) throw "no pgUrl set";
 
+    //you can use a connectionString or a normal connection
     const pgClient = new Client({
       connectionString: this.pgUrl
     });

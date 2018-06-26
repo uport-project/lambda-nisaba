@@ -1,3 +1,21 @@
+/*
+file - phone_attestation.js
+
+Function:
+1. Verify fuel token
+2. Verifies that sub has a uPort ID
+3. Creates attestation once everything checks out 
+
+inputs
+- attestationMgr: Create attestation for the subscriber
+- fuelTokenMgr: develops new JWT tokens for new users
+
+resources
+- N/A
+
+resource description
+- N/A
+*/
 import { Credentials, SimpleSigner } from "uport";
 
 class PhoneAttestationHandler {

@@ -1,3 +1,18 @@
+/*
+file - start_verification.js
+
+Function:
+1. Verify phone number using nexmo api
+
+inputs
+- phoneVerificationMgr: Verify phone number code sent via text
+
+resources
+- N/A
+
+resource description
+- N/A
+*/
 class StartVerificationHandler {
   constructor(phoneVerificationMgr) {
     this.phoneVerificationMgr = phoneVerificationMgr;

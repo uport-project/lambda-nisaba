@@ -1,10 +1,10 @@
-service: lambda-nisaba
+service: lambda-nisaba-csi
 
 provider:
   name: aws
-  runtime: nodejs6.10
+  runtime: nodejs8.10
   stage: develop
-  region: us-west-2
+  region: us-east-1
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -36,16 +36,6 @@ functions:
          method: post
      - http:
          path: recaptcha
-         method: post
-  funcaptcha:
-    handler: src/api_handler.funcaptcha
-    description: Validate Funcaptcha Code
-    events:
-     - http:
-         path: v3/funcaptcha #Legacy
-         method: post
-     - http:
-         path: funcaptcha
          method: post
   newDeviceKey:
     handler: src/api_handler.newDeviceKey
@@ -85,6 +75,3 @@ functions:
     - http:
         path: check
         method: post
-
-
-
