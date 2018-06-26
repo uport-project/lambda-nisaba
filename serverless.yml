@@ -37,16 +37,6 @@ functions:
      - http:
          path: recaptcha
          method: post
-  funcaptcha:
-    handler: src/api_handler.funcaptcha
-    description: Validate Funcaptcha Code
-    events:
-     - http:
-         path: v3/funcaptcha #Legacy
-         method: post
-     - http:
-         path: funcaptcha
-         method: post
   newDeviceKey:
     handler: src/api_handler.newDeviceKey
     description: Get a new fuel token by sending a signed requestToken

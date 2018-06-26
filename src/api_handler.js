@@ -3,16 +3,12 @@ const AWS = require("aws-sdk");
 const querystring = require("querystring");
 require('ethr-did-resolver')()
 require('uport-did-resolver')()
-const RecaptchaMgr = require("./lib/recaptchaMgr");
-const FuncaptchaMgr = require("./lib/funcaptchaMgr");
 const AuthMgr = require("./lib/authMgr");
 const FuelTokenMgr = require("./lib/fuelTokenMgr");
 const RequestTokenMgr = require("./lib/requestTokenMgr");
 const AttestationMgr = require("./lib/attestationMgr");
 const PhoneVerificationMgr = require("./lib/phoneVerificationMgr");
 
-const RecaptchaHandler = require("./handlers/recaptcha");
-const FuncaptchaHandler = require("./handlers/funcaptcha");
 const NewDeviceKeyHandler = require("./handlers/newDeviceKey");
 const PhoneAttestationHandler = require("./handlers/phone_attestation");
 const StartVerificationHandler = require("./handlers/start_verification");
@@ -20,16 +16,12 @@ const ContinueVerificationHandler = require("./handlers/continue_verification");
 const CheckVerificationHandler = require("./handlers/check_verification");
 
 //instantiate manager services needed for methods
-let recaptchaMgr = new RecaptchaMgr(); //setting and verify the captcha token
-let funcaptchaMgr = new FuncaptchaMgr(); //interactive captcha service (JWT token generation)
 let authMgr = new AuthMgr(); //verifies authorization request to nisaba service
 let fuelTokenMgr = new FuelTokenMgr(); //develops new JWT tokens for new users
 let requestTokenMgr = new RequestTokenMgr(); // Generate and verify request token
 let attestationMgr = new AttestationMgr(); // Create attestation for the subscriber
 let phoneVerificationMgr = new PhoneVerificationMgr(); //Verify phone number code sent via text
 
-let recaptchaHandler = new RecaptchaHandler(recaptchaMgr, fuelTokenMgr);
-let funcaptchaHandler = new FuncaptchaHandler(funcaptchaMgr, fuelTokenMgr);
 let newDeviceKeyHandler = new NewDeviceKeyHandler(
   authMgr,
   requestTokenMgr,
@@ -49,16 +41,6 @@ let checkVerificationHandler = new CheckVerificationHandler(
   phoneVerificationMgr,
   fuelTokenMgr
 );
-
-//verifies recaptcha token and provides fuel token
-module.exports.recaptcha = (event, context, callback) => {
-  postHandler(recaptchaHandler, event, context, callback);
-};
-
-//verifies funcaptcha token and provides fuel token
-module.exports.funcaptcha = (event, context, callback) => {
-  postHandler(funcaptchaHandler, event, context, callback);
-};
 
 //Get a new fuel token by sending a signed requestToken
 module.exports.newDeviceKey = (event, context, callback) => {
@@ -87,8 +69,6 @@ module.exports.check_verification = (event, context, callback) => {
 
 const postHandler = (handler, event, context, callback) => {
   if (
-    !recaptchaMgr.isSecretsSet() ||
-    !funcaptchaMgr.isSecretsSet() ||
     !authMgr.isSecretsSet() ||
     !fuelTokenMgr.isSecretsSet() ||
     !phoneVerificationMgr.isSecretsSet()
@@ -101,8 +81,6 @@ const postHandler = (handler, event, context, callback) => {
       .promise()
       .then(data => {
         const decrypted = String(data.Plaintext);
-        recaptchaMgr.setSecrets(JSON.parse(decrypted));
-        funcaptchaMgr.setSecrets(JSON.parse(decrypted));
         authMgr.setSecrets(JSON.parse(decrypted));
         fuelTokenMgr.setSecrets(JSON.parse(decrypted));
         phoneVerificationMgr.setSecrets(JSON.parse(decrypted));
@@ -126,7 +104,7 @@ const doHandler = (handler, event, context, callback) => {
         })
       };
     } else {
-      //console.log(err);
+      console.log(err);
       let code = 500;
       if (err.code) code = err.code;
       let message = err;
