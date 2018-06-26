@@ -89,6 +89,7 @@ class NewDeviceKeyHandler {
 
     console.log("dRequestToken publicKey", dRequestToken.doc.publicKey);
 
+    // Don't know why only support "Secp256k1VerificationKey2018"???
     // const pubKey = dRequestToken.doc.publicKey.find(
     //   pub => pub.type === "Secp256k1VerificationKey2018"
     // );
