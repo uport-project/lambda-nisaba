@@ -41,7 +41,6 @@
     "serverless-webpack": "^3.1.2"
   },
   "dependencies": {
-    "aws-sdk": "^2.259.1",
     "ethr-did-resolver": "^0.0.8",
     "jsontokens": "^0.7.6",
     "nexmo": "^2.2.0",
