@@ -42,11 +42,6 @@ let checkVerificationHandler = new CheckVerificationHandler(
   fuelTokenMgr
 );
 
-//verifies recaptcha token and provides fuel token
-module.exports.recaptcha = (event, context, callback) => {
-  postHandler(recaptchaHandler, event, context, callback);
-};
-
 //Get a new fuel token by sending a signed requestToken
 module.exports.newDeviceKey = (event, context, callback) => {
   postHandler(newDeviceKeyHandler, event, context, callback);
@@ -74,7 +69,6 @@ module.exports.check_verification = (event, context, callback) => {
 
 const postHandler = (handler, event, context, callback) => {
   if (
-    !recaptchaMgr.isSecretsSet() ||
     !authMgr.isSecretsSet() ||
     !fuelTokenMgr.isSecretsSet() ||
     !phoneVerificationMgr.isSecretsSet()
@@ -87,7 +81,6 @@ const postHandler = (handler, event, context, callback) => {
       .promise()
       .then(data => {
         const decrypted = String(data.Plaintext);
-        recaptchaMgr.setSecrets(JSON.parse(decrypted));
         authMgr.setSecrets(JSON.parse(decrypted));
         fuelTokenMgr.setSecrets(JSON.parse(decrypted));
         phoneVerificationMgr.setSecrets(JSON.parse(decrypted));
