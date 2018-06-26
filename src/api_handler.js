@@ -5,7 +5,7 @@ require('ethr-did-resolver')()
 require('uport-did-resolver')()
 const AuthMgr = require("./lib/authMgr");
 const FuelTokenMgr = require("./lib/fuelTokenMgr");
-const UPortMgr = require("./lib/uPortMgr");
+const RequestTokenMgr = require("./lib/requestTokenMgr");
 const AttestationMgr = require("./lib/attestationMgr");
 const PhoneVerificationMgr = require("./lib/phoneVerificationMgr");
 
@@ -18,13 +18,13 @@ const CheckVerificationHandler = require("./handlers/check_verification");
 //instantiate manager services needed for methods
 let authMgr = new AuthMgr(); //verifies authorization request to nisaba service
 let fuelTokenMgr = new FuelTokenMgr(); //develops new JWT tokens for new users
-let uPortMgr = new UPortMgr(); //uport specific JWT token verification
+let requestTokenMgr = new RequestTokenMgr(); // Generate and verify request token
 let attestationMgr = new AttestationMgr(); // Create attestation for the subscriber
 let phoneVerificationMgr = new PhoneVerificationMgr(); //Verify phone number code sent via text
 
 let newDeviceKeyHandler = new NewDeviceKeyHandler(
   authMgr,
-  uPortMgr,
+  requestTokenMgr,
   fuelTokenMgr
 );
 let phoneAttestationHandler = new PhoneAttestationHandler(
@@ -84,6 +84,7 @@ const postHandler = (handler, event, context, callback) => {
         authMgr.setSecrets(JSON.parse(decrypted));
         fuelTokenMgr.setSecrets(JSON.parse(decrypted));
         phoneVerificationMgr.setSecrets(JSON.parse(decrypted));
+        requestTokenMgr.setSecrets(JSON.parse(decrypted));
         doHandler(handler, event, context, callback);
       });
   } else {

@@ -7,9 +7,12 @@ describe("CheckVerificationHandler", () => {
       return Promise.resolve({ data: "data" }, null);
     })
   };
+  let fuelTokenMgrMock = {
+    newToken: jest.fn()
+  };
 
   beforeAll(() => {
-    sut = new CheckVerificationHandler(phoneVerificationMgrMock);
+    sut = new CheckVerificationHandler(phoneVerificationMgrMock, fuelTokenMgrMock);
   });
 
   test("empty constructor", () => {
