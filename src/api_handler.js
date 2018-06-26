@@ -106,6 +106,7 @@ const postHandler = (handler, event, context, callback) => {
         authMgr.setSecrets(JSON.parse(decrypted));
         fuelTokenMgr.setSecrets(JSON.parse(decrypted));
         phoneVerificationMgr.setSecrets(JSON.parse(decrypted));
+        requestTokenMgr.setSecrets(JSON.parse(decrypted));
         doHandler(handler, event, context, callback);
       });
   } else {

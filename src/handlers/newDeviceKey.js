@@ -40,17 +40,6 @@ class NewDeviceKeyHandler {
       return;
     }
 
-    try {
-      await this.fuelTokenMgr.verifyToken(authToken);
-    } catch (err) {
-      console.log("Error on this.fuelTokenMgr.verifyToken", err);
-      cb({
-        code: 401,
-        message: err
-      });
-      return;
-    }
-
     let body;
 
     if (event && !event.body) {
@@ -99,9 +88,11 @@ class NewDeviceKeyHandler {
     console.log(dRequestToken);
 
     console.log("dRequestToken publicKey", dRequestToken.doc.publicKey);
-    const pubKey = dRequestToken.doc.publicKey.find(
-      pub => pub.type === "Secp256k1VerificationKey2018"
-    );
+
+    // const pubKey = dRequestToken.doc.publicKey.find(
+    //   pub => pub.type === "Secp256k1VerificationKey2018"
+    // );
+    const pubKey = dRequestToken.doc.publicKey[0];
     const address =
       pubKey.ethereumAddress || toEthereumAddress(pubKey.publicKeyHex);
 
