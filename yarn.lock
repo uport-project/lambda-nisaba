@@ -4771,6 +4771,14 @@ uport-did-resolver@^0.0.2:
     did-resolver "^0.0.4"
     uport-lite "^1.0.2"
 
+uport-did-resolver@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/uport-did-resolver/-/uport-did-resolver-0.0.3.tgz#1336d3a84f6ae1897bed7233eabe72db9ce647a1"
+  dependencies:
+    babel-runtime "^6.26.0"
+    did-resolver "^0.0.4"
+    uport-lite "^1.0.2"
+
 uport-lite@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/uport-lite/-/uport-lite-1.0.2.tgz#f3a96d8df52d5496e2c6c8ec7cfd377b431513d4"
