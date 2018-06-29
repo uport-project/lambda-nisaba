@@ -67,3 +67,5 @@ curl_scripts/
 
 # linter
 .eslintrc.json
+
+.vscode
