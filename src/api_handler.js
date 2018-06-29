@@ -10,6 +10,7 @@ const FuelTokenMgr = require("./lib/fuelTokenMgr");
 const UPortMgr = require("./lib/uPortMgr");
 const AttestationMgr = require("./lib/attestationMgr");
 const PhoneVerificationMgr = require("./lib/phoneVerificationMgr");
+const InstanceVerificationMgr = require("./lib/instanceVerificationMgr");
 
 const RecaptchaHandler = require("./handlers/recaptcha");
 const FuncaptchaHandler = require("./handlers/funcaptcha");
@@ -18,6 +19,7 @@ const PhoneAttestationHandler = require("./handlers/phone_attestation");
 const StartVerificationHandler = require("./handlers/start_verification");
 const ContinueVerificationHandler = require("./handlers/continue_verification");
 const CheckVerificationHandler = require("./handlers/check_verification");
+const InstanceVerificationHandler = require("./handlers/instance_verification");
 
 let recaptchaMgr = new RecaptchaMgr();
 let funcaptchaMgr = new FuncaptchaMgr();
@@ -26,6 +28,7 @@ let fuelTokenMgr = new FuelTokenMgr();
 let uPortMgr = new UPortMgr();
 let attestationMgr = new AttestationMgr();
 let phoneVerificationMgr = new PhoneVerificationMgr();
+let instanceVerificationMgr = new InstanceVerificationMgr();
 
 let recaptchaHandler = new RecaptchaHandler(recaptchaMgr, fuelTokenMgr);
 let funcaptchaHandler = new FuncaptchaHandler(funcaptchaMgr, fuelTokenMgr);
@@ -46,6 +49,10 @@ let continueVerificationHandler = new ContinueVerificationHandler(
 );
 let checkVerificationHandler = new CheckVerificationHandler(
   phoneVerificationMgr
+);
+let instanceFuelHandler = new InstanceVerificationHandler(
+  instanceVerificationMgr,
+  fuelTokenMgr
 );
 
 module.exports.recaptcha = (event, context, callback) => {
@@ -69,6 +76,9 @@ module.exports.continue_verification = (event, context, callback) => {
 module.exports.check_verification = (event, context, callback) => {
   postHandler(checkVerificationHandler, event, context, callback);
 };
+module.exports.instance_fuel = (event, context, callback) => {
+  postHandler(instanceFuelHandler, event, context, callback);
+};
 
 const postHandler = (handler, event, context, callback) => {
   if (
@@ -76,7 +86,8 @@ const postHandler = (handler, event, context, callback) => {
     !funcaptchaMgr.isSecretsSet() ||
     !authMgr.isSecretsSet() ||
     !fuelTokenMgr.isSecretsSet() ||
-    !phoneVerificationMgr.isSecretsSet()
+    !phoneVerificationMgr.isSecretsSet() ||
+    !instanceVerificationMgr.isSecretsSet()
   ) {
     const kms = new AWS.KMS();
     kms
@@ -91,6 +102,7 @@ const postHandler = (handler, event, context, callback) => {
         authMgr.setSecrets(JSON.parse(decrypted));
         fuelTokenMgr.setSecrets(JSON.parse(decrypted));
         phoneVerificationMgr.setSecrets(JSON.parse(decrypted));
+        instanceVerificationMgr.setSecrets(JSON.parse(decrypted));
         doHandler(handler, event, context, callback);
       });
   } else {

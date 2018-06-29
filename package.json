@@ -1,6 +1,6 @@
 {
   "name": "lambda-nisaba",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "uPort anti-sybil & fuel token generator service",
   "main": "index.js",
   "scripts": {
@@ -48,7 +48,7 @@
     "serverless-kms-secrets": "^1.0.2",
     "serverless-webpack": "^3.1.0",
     "uport": "^0.7.0-alpha-2",
-    "uport-did-resolver": "^0.0.2",
+    "uport-did-resolver": "^0.0.3",
     "webpack": "^3.6.0",
     "webpack-node-externals": "^1.6.0"
   },
