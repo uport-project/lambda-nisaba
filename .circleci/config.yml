@@ -1,7 +1,7 @@
 version: 2
 jobs:
   build:
-    working_directory: ~/lambda-pututu
+    working_directory: ~/lambda-nisaba
     docker:
       - image: circleci/node:6.10
     steps:
